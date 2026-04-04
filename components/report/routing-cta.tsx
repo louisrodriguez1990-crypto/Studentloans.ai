@@ -17,13 +17,14 @@ interface CTAConfig {
 const CTA_CONFIG: Record<RoutingTag, CTAConfig> = {
   refinance_candidate: {
     icon: TrendingDown,
-    title: 'Compare refinance rates',
+    title: 'You may qualify for a lower rate',
     description:
-      'Your income and loan profile may qualify you for a competitive private rate. ' +
-      'Review the federal benefit trade-offs in your report before applying.',
-    actionLabel: 'Compare rates',
-    actionHref: '/compare/refinance-options',
+      'Based on your income and loan profile, refinancing to a private loan could lower your ' +
+      'monthly payment. Note: refinancing means giving up IDR plans and forgiveness protections permanently.',
+    actionLabel: 'See if you qualify at ELFI',
+    actionHref: 'https://www.elfi.com/?code=39533',
     isAffiliate: true,
+    isExternal: true,
   },
   forgiveness_candidate: {
     icon: Award,
