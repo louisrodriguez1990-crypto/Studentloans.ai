@@ -5,7 +5,7 @@ import matter from 'gray-matter';
 import { MDXRemote } from 'next-mdx-remote/rsc';
 import type { Metadata } from 'next';
 import { buildMetadata } from '@/components/seo/open-graph';
-import { JsonLd, articleSchema } from '@/components/seo/json-ld';
+import { JsonLd, articleSchema, breadcrumbSchema } from '@/components/seo/json-ld';
 import { BASE_URL } from '@/lib/constants';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
@@ -82,6 +82,13 @@ export default async function LearnPage({
           datePublished: frontmatter.datePublished,
           dateModified: frontmatter.dateModified,
         })}
+      />
+      <JsonLd
+        data={breadcrumbSchema([
+          { name: 'Home', url: BASE_URL },
+          { name: 'Learn', url: `${BASE_URL}/learn` },
+          { name: frontmatter.title, url: `${BASE_URL}/learn/${slug}` },
+        ])}
       />
 
       <div className="mx-auto max-w-3xl px-4 py-12">
