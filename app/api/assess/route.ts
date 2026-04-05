@@ -48,6 +48,7 @@ export async function POST(request: NextRequest) {
     sessionId: intake.sessionId,
     confidence: result.confidence,
     routingTags: result.routingTags,
+    assessment: result,
   });
 }
 

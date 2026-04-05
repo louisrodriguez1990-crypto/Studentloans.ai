@@ -5,7 +5,7 @@ import { anthropic, REPORT_MODEL, REPORT_MAX_TOKENS } from '@/lib/anthropic';
 import { buildUserPrompt, SYSTEM_PROMPT } from '@/lib/report-prompt';
 import { hashAssessment } from '@/engine/hash';
 import { trackEvent } from '@/lib/posthog';
-import type { Report } from '@/engine/types';
+import type { Report, AssessmentResult } from '@/engine/types';
 
 export const runtime = 'nodejs';
 // Reports can take up to 30s for cold LLM calls
@@ -27,22 +27,26 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const { sessionId, bust } = parsed.data;
+  const { sessionId, bust, assessment: clientAssessment } = parsed.data;
 
-  // Load the assessment from KV
-  const assessment = await getSession(sessionId);
+  // Try KV first, fall back to client-provided assessment (non-fatal if KV is down)
+  let assessment: AssessmentResult | null = await getSession(sessionId).catch(() => null);
   if (!assessment) {
-    return NextResponse.json(
-      { error: 'Session not found or expired. Please complete the assessment again.' },
-      { status: 404 },
-    );
+    if (clientAssessment) {
+      assessment = clientAssessment;
+    } else {
+      return NextResponse.json(
+        { error: 'Session not found or expired. Please complete the assessment again.' },
+        { status: 404 },
+      );
+    }
   }
 
   const assessmentHash = hashAssessment(assessment);
 
-  // Check cache unless bust=true (used by "Regenerate" button)
+  // Check report cache (non-fatal if KV is down)
   if (!bust) {
-    const cached = await getReport(assessmentHash);
+    const cached = await getReport(assessmentHash).catch(() => null);
     if (cached) {
       trackEvent(sessionId, 'report_served_from_cache').catch(() => {});
       return NextResponse.json(cached);
@@ -80,8 +84,10 @@ export async function POST(request: NextRequest) {
     modelVersion: REPORT_MODEL,
   };
 
-  // Cache the report (30-day TTL)
-  await setReport(assessmentHash, report);
+  // Cache the report (30-day TTL) — non-fatal if KV is down
+  setReport(assessmentHash, report).catch((err) => {
+    console.error('[report] KV report cache write failed (non-fatal):', err);
+  });
 
   trackEvent(sessionId, 'report_generated', { bust: bust ?? false }).catch(() => {});
 

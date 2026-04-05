@@ -11,6 +11,7 @@ import type {
   EmploymentType,
   IncomeRange,
   UserIntent,
+  AssessmentResult,
 } from '@/engine/types';
 
 // ─── Question config ──────────────────────────────────────────────────────────
@@ -326,6 +327,18 @@ export function useChatIntake() {
       // Subscribe is best-effort — log failure but don't block the user
       if (subscribeResult.status === 'rejected' || !subscribeResult.value.ok) {
         console.warn('[chat] Subscribe call failed — user will still see results');
+      }
+
+      // Store the full assessment in sessionStorage so the results page can access it
+      // without requiring Vercel KV to be configured
+      try {
+        const assessData = await assessResult.value.clone().json() as { assessment?: AssessmentResult };
+        if (assessData.assessment && typeof window !== 'undefined') {
+          sessionStorage.setItem(`assessment_${sessionId}`, JSON.stringify(assessData.assessment));
+        }
+      } catch {
+        // sessionStorage write failure is non-fatal — results page will show an error
+        console.warn('[chat] Failed to store assessment in sessionStorage');
       }
 
       router.push(`/assess/results?session=${sessionId}`);
