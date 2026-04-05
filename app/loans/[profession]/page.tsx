@@ -6,6 +6,7 @@ import { buildMetadata } from '@/components/seo/open-graph';
 import { JsonLd, articleSchema, breadcrumbSchema } from '@/components/seo/json-ld';
 import { BASE_URL } from '@/lib/constants';
 import { PROFESSIONS, getProfessionBySlug, formatSalary } from '@/lib/profession-data';
+import { StickyAssessmentCTA } from '@/components/ui/sticky-assessment-cta';
 
 export const revalidate = 86400;
 export const dynamicParams = false;
@@ -237,6 +238,7 @@ export default async function ProfessionPage({
           </div>
         </div>
       </div>
+      <StickyAssessmentCTA />
     </>
   );
 }

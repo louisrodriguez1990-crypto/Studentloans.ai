@@ -6,6 +6,7 @@ import { buildMetadata } from '@/components/seo/open-graph';
 import { JsonLd, articleSchema, breadcrumbSchema } from '@/components/seo/json-ld';
 import { BASE_URL } from '@/lib/constants';
 import { STATES, getStateBySlug, formatBorrowerCount } from '@/lib/state-data';
+import { StickyAssessmentCTA } from '@/components/ui/sticky-assessment-cta';
 
 export const revalidate = 86400; // ISR: daily
 export const dynamicParams = false;
@@ -272,6 +273,7 @@ export default async function StatePage({
           </Link>
         </div>
       </div>
+      <StickyAssessmentCTA />
     </>
   );
 }

@@ -1,11 +1,12 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { ExternalLink, CheckCircle, ArrowRight, AlertTriangle } from 'lucide-react';
+import { ArrowRight, AlertTriangle } from 'lucide-react';
 import { buildMetadata } from '@/components/seo/open-graph';
 import { JsonLd, breadcrumbSchema } from '@/components/seo/json-ld';
 import { AffiliateDisclosure } from '@/components/ui/affiliate-disclosure';
 import { BASE_URL } from '@/lib/constants';
 import { LENDERS } from '@/lib/lenders';
+import { LenderViewToggle } from '@/components/compare/lender-view-toggle';
 
 export const metadata: Metadata = buildMetadata({
   title: 'Best Student Loan Refinancing Lenders 2026 — Compare 5 Options',
@@ -75,73 +76,9 @@ export default function RefinanceLendersPage() {
           </Link>
         </div>
 
-        {/* Lender cards */}
-        <div className="mt-10 space-y-6">
-          {LENDERS.map((lender, index) => (
-            <div
-              key={lender.id}
-              className={`rounded-xl border p-6 ${
-                index === 0
-                  ? 'border-emerald-300 bg-white shadow-sm ring-1 ring-emerald-200'
-                  : 'border-gray-200 bg-white'
-              }`}
-            >
-              {/* Badge */}
-              {lender.badge && (
-                <span className="inline-block mb-3 rounded-full bg-emerald-50 border border-emerald-200 px-3 py-0.5 text-xs font-medium text-emerald-700">
-                  {lender.badge}
-                </span>
-              )}
-
-              <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
-                <div className="flex-1">
-                  <h2 className="text-xl font-bold text-gray-900">{lender.name}</h2>
-                  <p className="mt-0.5 text-sm text-gray-500">{lender.tagline}</p>
-
-                  <div className="mt-3 flex flex-wrap gap-4">
-                    <div>
-                      <p className="text-xs text-gray-400 uppercase tracking-wide">Rate range</p>
-                      <p className="mt-0.5 text-base font-semibold text-gray-900">{lender.rateRange}</p>
-                    </div>
-                    <div>
-                      <p className="text-xs text-gray-400 uppercase tracking-wide">Min. credit score</p>
-                      <p className="mt-0.5 text-base font-semibold text-gray-900">{lender.minCreditScore}+</p>
-                    </div>
-                    <div>
-                      <p className="text-xs text-gray-400 uppercase tracking-wide">Loan range</p>
-                      <p className="mt-0.5 text-base font-semibold text-gray-900">
-                        ${(lender.minLoanAmount / 1000).toFixed(0)}K – ${(lender.maxLoanAmount / 1000).toFixed(0)}K
-                      </p>
-                    </div>
-                  </div>
-
-                  <ul className="mt-4 space-y-1">
-                    {lender.features.map((f) => (
-                      <li key={f} className="flex items-center gap-2 text-sm text-gray-600">
-                        <CheckCircle className="h-4 w-4 shrink-0 text-emerald-500" />
-                        {f}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                <div className="sm:shrink-0">
-                  <a
-                    href={lender.affiliateHref}
-                    target="_blank"
-                    rel={`noopener noreferrer nofollow${lender.isAffiliate ? ' sponsored' : ''}`}
-                    className="inline-flex items-center gap-2 rounded-lg bg-emerald-600 px-5 py-3 text-sm font-semibold text-white hover:bg-emerald-700 transition-colors"
-                  >
-                    {lender.ctaLabel}
-                    <ExternalLink className="h-4 w-4" />
-                  </a>
-                  <p className="mt-2 text-xs text-gray-400 text-center">
-                    Soft credit check · No commitment
-                  </p>
-                </div>
-              </div>
-            </div>
-          ))}
+        {/* Lender cards/table — with view toggle */}
+        <div className="mt-10">
+          <LenderViewToggle lenders={LENDERS} />
         </div>
 
         {/* Bottom CTA */}

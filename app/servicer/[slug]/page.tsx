@@ -9,6 +9,7 @@ import { JsonLd, articleSchema, breadcrumbSchema } from '@/components/seo/json-l
 import { BASE_URL } from '@/lib/constants';
 import Link from 'next/link';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
+import { StickyAssessmentCTA } from '@/components/ui/sticky-assessment-cta';
 
 export const revalidate = 3600;
 export const dynamicParams = false;
@@ -163,6 +164,7 @@ export default async function ServicerPage({
           </div>
         </div>
       </div>
+      <StickyAssessmentCTA />
     </>
   );
 }

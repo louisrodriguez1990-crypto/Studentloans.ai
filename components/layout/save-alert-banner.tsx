@@ -4,7 +4,9 @@ import { useState } from 'react';
 import { Bell, X } from 'lucide-react';
 
 export function SaveAlertBanner() {
-  const [dismissed, setDismissed] = useState(false);
+  const [dismissed, setDismissed] = useState(() => {
+    try { return localStorage.getItem('save_banner_v1') === '1'; } catch { return false; }
+  });
   const [email, setEmail] = useState('');
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState('');
@@ -73,7 +75,10 @@ export function SaveAlertBanner() {
           )}
         </div>
         <button
-          onClick={() => setDismissed(true)}
+          onClick={() => {
+          try { localStorage.setItem('save_banner_v1', '1'); } catch {}
+          setDismissed(true);
+        }}
           className="text-amber-500 hover:text-amber-700 shrink-0"
           aria-label="Dismiss"
         >

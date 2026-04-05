@@ -9,6 +9,7 @@ import { JsonLd, articleSchema } from '@/components/seo/json-ld';
 import { BASE_URL } from '@/lib/constants';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
+import { StickyAssessmentCTA } from '@/components/ui/sticky-assessment-cta';
 
 export const revalidate = 3600; // ISR: revalidate hourly
 export const dynamicParams = false;
@@ -124,6 +125,7 @@ export default async function LearnPage({
           </Link>
         </div>
       </div>
+      <StickyAssessmentCTA />
     </>
   );
 }
