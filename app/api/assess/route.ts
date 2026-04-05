@@ -3,10 +3,18 @@ import { AssessRequestSchema } from '@/lib/validations';
 import { runAssessment } from '@/engine/assess';
 import { setSession } from '@/lib/kv';
 import { trackEvent } from '@/lib/posthog';
+import { checkRateLimit, getClientIp } from '@/lib/rate-limit';
 
 export const runtime = 'nodejs';
 
 export async function POST(request: NextRequest) {
+  // Rate limiting: 5 assessments/min per IP (prevent API abuse)
+  const ip = getClientIp(request);
+  const { success: allowed } = await checkRateLimit(`assess:${ip}`, 5, 60);
+  if (!allowed) {
+    return NextResponse.json({ error: 'Too many requests. Please wait a moment.' }, { status: 429 });
+  }
+
   let body: unknown;
   try {
     body = await request.json();

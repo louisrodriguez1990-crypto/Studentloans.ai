@@ -5,13 +5,45 @@ import { anthropic, REPORT_MODEL, REPORT_MAX_TOKENS } from '@/lib/anthropic';
 import { buildUserPrompt, SYSTEM_PROMPT } from '@/lib/report-prompt';
 import { hashAssessment } from '@/engine/hash';
 import { trackEvent } from '@/lib/posthog';
-import type { Report } from '@/engine/types';
+import { checkRateLimit, getClientIp } from '@/lib/rate-limit';
+import type { AssessmentResult, Report } from '@/engine/types';
 
 export const runtime = 'nodejs';
-// Reports can take up to 30s for cold LLM calls
-export const maxDuration = 30;
+export const maxDuration = 45; // extended to accommodate retries
+
+/** Generate LLM report with up to 3 attempts and exponential backoff */
+async function generateWithRetry(assessment: NonNullable<Awaited<ReturnType<typeof getSession>>>): Promise<string> {
+  const maxAttempts = 3;
+  let lastErr: unknown;
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    try {
+      const message = await anthropic.messages.create({
+        model: REPORT_MODEL,
+        max_tokens: REPORT_MAX_TOKENS,
+        system: SYSTEM_PROMPT,
+        messages: [{ role: 'user', content: buildUserPrompt(assessment) }],
+      });
+      const content = message.content[0];
+      if (content.type !== 'text') throw new Error('Unexpected LLM response type');
+      return content.text;
+    } catch (err) {
+      lastErr = err;
+      if (attempt < maxAttempts) {
+        await new Promise((r) => setTimeout(r, 1000 * attempt)); // 1s, 2s
+      }
+    }
+  }
+  throw lastErr;
+}
 
 export async function POST(request: NextRequest) {
+  // Rate limiting: 10 requests/min per IP
+  const ip = getClientIp(request);
+  const { success: allowed } = await checkRateLimit(`report:${ip}`, 10, 60);
+  if (!allowed) {
+    return NextResponse.json({ error: 'Too many requests. Please wait a moment.' }, { status: 429 });
+  }
+
   let body: unknown;
   try {
     body = await request.json();
@@ -27,45 +59,38 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const { sessionId, bust } = parsed.data;
+  const { sessionId, bust, assessment: clientAssessment } = parsed.data;
 
-  // Load the assessment from KV
-  const assessment = await getSession(sessionId);
+  // Load the assessment — prefer KV, fall back to client-provided
+  let assessment = await getSession(sessionId).catch(() => null);
   if (!assessment) {
-    return NextResponse.json(
-      { error: 'Session not found or expired. Please complete the assessment again.' },
-      { status: 404 },
-    );
+    if (clientAssessment) {
+      assessment = clientAssessment as unknown as AssessmentResult;
+    } else {
+      return NextResponse.json(
+        { error: 'Session not found or expired. Please complete the assessment again.' },
+        { status: 404 },
+      );
+    }
   }
 
   const assessmentHash = hashAssessment(assessment);
 
-  // Check cache unless bust=true (used by "Regenerate" button)
+  // Check cache unless bust=true
   if (!bust) {
-    const cached = await getReport(assessmentHash);
+    const cached = await getReport(assessmentHash).catch(() => null);
     if (cached) {
       trackEvent(sessionId, 'report_served_from_cache').catch(() => {});
       return NextResponse.json(cached);
     }
   }
 
-  // Generate report via LLM
+  // Generate with retry logic
   let markdown: string;
   try {
-    const message = await anthropic.messages.create({
-      model: REPORT_MODEL,
-      max_tokens: REPORT_MAX_TOKENS,
-      system: SYSTEM_PROMPT,
-      messages: [{ role: 'user', content: buildUserPrompt(assessment) }],
-    });
-
-    const content = message.content[0];
-    if (content.type !== 'text') {
-      throw new Error('Unexpected LLM response type');
-    }
-    markdown = content.text;
+    markdown = await generateWithRetry(assessment);
   } catch (err) {
-    console.error('[report] LLM generation failed:', err);
+    console.error('[report] LLM generation failed after retries:', err);
     return NextResponse.json(
       { error: 'Report generation failed. Please try again.' },
       { status: 502 },
@@ -80,8 +105,9 @@ export async function POST(request: NextRequest) {
     modelVersion: REPORT_MODEL,
   };
 
-  // Cache the report (30-day TTL)
-  await setReport(assessmentHash, report);
+  setReport(assessmentHash, report).catch((err) =>
+    console.error('[report] KV cache write failed:', err),
+  );
 
   trackEvent(sessionId, 'report_generated', { bust: bust ?? false }).catch(() => {});
 
