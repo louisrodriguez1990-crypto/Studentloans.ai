@@ -29,3 +29,13 @@ export function getSupabaseAdmin() {
 //   session_id    text
 //   segment       text
 //   created_at    timestamptz not null default now()
+//
+// Table: pslf_trackers
+//   id                     uuid primary key default gen_random_uuid()
+//   email                  text not null unique
+//   qualifying_payments    integer not null default 0
+//   employment_start_month text
+//   current_plan           text
+//   loan_balance           text
+//   enrolled_in_save       boolean
+//   updated_at             timestamptz not null default now()
