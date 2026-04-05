@@ -51,7 +51,7 @@ export function ChatIntake() {
       </p>
 
       {/* Message thread */}
-      <div className="space-y-3 min-h-[300px] max-h-[55vh] overflow-y-auto pb-4 pr-1">
+      <div className="space-y-3 min-h-[300px] max-h-[55vh] overflow-y-auto pb-4 px-2">
         {messages.map((m) => (
           <ChatBubble key={m.key} role={m.role} text={m.text} />
         ))}

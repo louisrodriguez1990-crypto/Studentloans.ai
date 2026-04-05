@@ -25,8 +25,12 @@ export async function POST(request: NextRequest) {
   const intake = parsed.data;
   const result = runAssessment(intake);
 
-  // Store in KV (7-day TTL)
-  await setSession(intake.sessionId, result);
+  // Store in KV (7-day TTL) — non-fatal if KV is not configured
+  try {
+    await setSession(intake.sessionId, result);
+  } catch (err) {
+    console.error('[assess] KV write failed (non-fatal):', err);
+  }
 
   // Fire-and-forget: persist to Supabase for analytics (non-blocking)
   persistToSupabase(intake, result).catch((err) => {

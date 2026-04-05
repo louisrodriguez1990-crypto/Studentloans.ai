@@ -12,21 +12,22 @@ export function Navbar() {
           <span className="text-emerald-600">.ai</span>
         </Link>
 
-        <div className="flex items-center gap-6 text-sm">
-          <Link href="/learn/save-plan" className="text-gray-600 hover:text-gray-900">
+        <div className="flex items-center gap-3 sm:gap-6 text-sm">
+          <Link href="/learn/save-plan" className="hidden sm:block text-gray-600 hover:text-gray-900">
             Learn
           </Link>
-          <Link href="/faq" className="text-gray-600 hover:text-gray-900">
+          <Link href="/faq" className="hidden sm:block text-gray-600 hover:text-gray-900">
             FAQ
           </Link>
-          <Link href="/about" className="text-gray-600 hover:text-gray-900">
+          <Link href="/about" className="hidden sm:block text-gray-600 hover:text-gray-900">
             About
           </Link>
           <Link
             href="/assess"
-            className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-700"
+            className="rounded-lg bg-emerald-600 px-3 py-2 sm:px-4 text-sm font-medium text-white hover:bg-emerald-700"
           >
-            Get My Assessment
+            <span className="sm:hidden">Start</span>
+            <span className="hidden sm:inline">Get My Assessment</span>
           </Link>
         </div>
       </nav>

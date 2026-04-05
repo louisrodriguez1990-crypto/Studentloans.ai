@@ -58,7 +58,7 @@ const STATUS_OPTIONS: ChatOption[] = [
 
 const EMPLOYMENT_OPTIONS: ChatOption[] = [
   { value: 'government_nonprofit', label: 'Government or nonprofit' },
-  { value: 'private_sector',       label: 'Private sector' },
+  { value: 'private_sector',       label: 'For a company or business' },
   { value: 'self_employed',        label: 'Self-employed' },
   { value: 'unemployed',           label: 'Not currently employed' },
 ];
@@ -301,7 +301,7 @@ export function useChatIntake() {
     const payload = { ...answers, sessionId, timestamp: new Date().toISOString() };
 
     try {
-      const [assessRes, subscribeRes] = await Promise.all([
+      const [assessResult, subscribeResult] = await Promise.allSettled([
         fetch('/api/assess', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -314,12 +314,18 @@ export function useChatIntake() {
         }),
       ]);
 
-      if (!assessRes.ok) {
-        const err = await assessRes.json().catch(() => ({}));
+      // Assess is required — block on it
+      if (assessResult.status === 'rejected') {
+        throw new Error('Assessment failed. Please try again.');
+      }
+      if (!assessResult.value.ok) {
+        const err = await assessResult.value.json().catch(() => ({}));
         throw new Error((err as { error?: string }).error ?? 'Assessment failed. Please try again.');
       }
-      if (!subscribeRes.ok) {
-        throw new Error('Could not save your email. Please try again.');
+
+      // Subscribe is best-effort — log failure but don't block the user
+      if (subscribeResult.status === 'rejected' || !subscribeResult.value.ok) {
+        console.warn('[chat] Subscribe call failed — user will still see results');
       }
 
       router.push(`/assess/results?session=${sessionId}`);
