@@ -39,3 +39,11 @@ export function getSupabaseAdmin() {
 //   loan_balance           text
 //   enrolled_in_save       boolean
 //   updated_at             timestamptz not null default now()
+//
+// Table: advisor_requests
+//   id         uuid primary key default gen_random_uuid()
+//   name       text not null
+//   email      text not null
+//   situation  text not null
+//   details    text
+//   created_at timestamptz not null default now()
