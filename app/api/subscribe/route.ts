@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { SubscribeRequestSchema } from '@/lib/validations';
 import { getResend, FROM_EMAIL } from '@/lib/resend';
 import { trackEvent } from '@/lib/posthog';
+import { scheduleDripEmails } from '@/lib/email-sequences';
 
 export const runtime = 'nodejs';
 
@@ -21,7 +22,7 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const { email, sessionId } = parsed.data;
+  const { email, sessionId, segment: clientSegment } = parsed.data;
 
   // Send confirmation email
   try {
@@ -39,9 +40,9 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  // Persist to Supabase subscribers table (fire-and-forget)
-  persistSubscriber(email, sessionId).catch((err) => {
-    console.error('[subscribe] Supabase persist failed:', err);
+  // Persist to Supabase and determine segment (fire-and-forget)
+  persistAndSchedule(email, sessionId, clientSegment).catch((err) => {
+    console.error('[subscribe] Background persist/schedule failed:', err);
   });
 
   if (sessionId) {
@@ -51,12 +52,44 @@ export async function POST(request: NextRequest) {
   return NextResponse.json({ success: true });
 }
 
-async function persistSubscriber(email: string, sessionId?: string): Promise<void> {
+async function persistAndSchedule(
+  email: string,
+  sessionId?: string,
+  clientSegment?: string,
+): Promise<void> {
   const { getSupabaseAdmin } = await import('@/lib/supabase');
   const admin = getSupabaseAdmin();
+
+  // Determine segment: look up from assessment if sessionId provided, else use clientSegment
+  let segment: string | null = clientSegment ?? null;
+
+  if (!segment && sessionId) {
+    try {
+      const { data: assessment } = await admin
+        .from('assessments')
+        .select('result_data')
+        .eq('session_id', sessionId)
+        .single();
+      const routingTags = assessment?.result_data?.routingTags as string[] | undefined;
+      segment = routingTags?.[0] ?? null;
+    } catch {
+      // Non-fatal — proceed without segment
+    }
+  }
+
+  // Upsert subscriber with segment
   await admin
     .from('subscribers')
-    .upsert({ email, session_id: sessionId ?? null }, { onConflict: 'email' });
+    .upsert({ email, session_id: sessionId ?? null, segment }, { onConflict: 'email' });
+
+  // Schedule drip emails based on segment
+  if (segment) {
+    try {
+      await scheduleDripEmails(email, segment, FROM_EMAIL, getResend());
+    } catch (err) {
+      console.error('[subscribe] Drip scheduling failed (non-fatal):', err);
+    }
+  }
 }
 
 function buildConfirmationEmail(): string {

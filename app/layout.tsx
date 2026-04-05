@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 import { Navbar } from '@/components/layout/navbar';
 import { Footer } from '@/components/layout/footer';
+import { SaveAlertBanner } from '@/components/layout/save-alert-banner';
 import { AnalyticsProvider } from '@/components/layout/analytics-provider';
 import { SITE_NAME, BASE_URL } from '@/lib/constants';
 
@@ -29,6 +30,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="flex min-h-full flex-col bg-white text-gray-900">
         <AnalyticsProvider>
           <Navbar />
+          <SaveAlertBanner />
           <main className="flex-1">{children}</main>
           <Footer />
         </AnalyticsProvider>

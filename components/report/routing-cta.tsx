@@ -17,13 +17,14 @@ interface CTAConfig {
 const CTA_CONFIG: Record<RoutingTag, CTAConfig> = {
   refinance_candidate: {
     icon: TrendingDown,
-    title: 'Compare refinance rates',
+    title: 'Compare refinancing rates — 5 lenders',
     description:
-      'Your income and loan profile may qualify you for a competitive private rate. ' +
-      'Review the federal benefit trade-offs in your report before applying.',
-    actionLabel: 'Compare rates',
-    actionHref: '/compare/refinance-options',
+      'Based on your income and employment, refinancing may lower your monthly payment. ' +
+      "Compare 5 lenders side-by-side — including rates, fees, and the federal benefits you'd give up.",
+    actionLabel: 'Compare rates from 5 lenders',
+    actionHref: '/compare/refinance-lenders',
     isAffiliate: true,
+    isExternal: false,
   },
   forgiveness_candidate: {
     icon: Award,
