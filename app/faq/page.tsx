@@ -10,12 +10,18 @@ import { ArrowRight } from 'lucide-react';
 
 export const revalidate = 3600;
 
-export const metadata: Metadata = buildMetadata({
-  title: 'Frequently Asked Questions',
-  description:
-    'Answers to common questions about the SAVE Plan injunction, PSLF, IDR forgiveness, and the 2026 student loan policy changes.',
-  path: '/faq',
-});
+export const metadata: Metadata = {
+  ...buildMetadata({
+    title: 'Frequently Asked Questions',
+    description:
+      'Answers to common questions about the SAVE Plan injunction, PSLF, IDR forgiveness, and the 2026 student loan policy changes.',
+    path: '/faq',
+  }),
+  other: {
+    'article:modified_time': '2026-04-01',
+    'article:published_time': '2026-04-01',
+  },
+};
 
 interface FAQFrontmatter {
   title: string;

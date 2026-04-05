@@ -93,9 +93,10 @@ export function Navbar() {
 
           <Link
             href="/assess"
-            className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
+            className="rounded-lg bg-emerald-600 px-3 py-2 sm:px-4 text-sm font-medium text-white hover:bg-emerald-700"
           >
-            Get My Assessment
+            <span className="sm:hidden">Start</span>
+            <span className="hidden sm:inline">Get My Assessment</span>
           </Link>
         </div>
 

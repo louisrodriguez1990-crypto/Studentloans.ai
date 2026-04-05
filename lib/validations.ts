@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import type { AssessmentResult } from '@/engine/types';
 
 // ─── Intake ──────────────────────────────────────────────────────────────────
 
@@ -49,7 +50,8 @@ export const AssessRequestSchema = IntakeDataSchema;
 export const ReportRequestSchema = z.object({
   sessionId: z.string().min(1).max(64),
   bust: z.boolean().optional(), // true = skip cache read, generate fresh phrasing
-  assessment: z.record(z.string(), z.unknown()).optional(), // client-provided AssessmentResult fallback if KV not available
+  // Optional: client-provided assessment as fallback when KV session is unavailable
+  assessment: z.custom<AssessmentResult>().optional(),
 });
 
 export const SubscribeRequestSchema = z.object({
