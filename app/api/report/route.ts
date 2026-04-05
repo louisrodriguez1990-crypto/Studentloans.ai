@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { ReportRequestSchema } from '@/lib/validations';
 import { getSession, getReport, setReport } from '@/lib/kv';
-import { anthropic, REPORT_MODEL, REPORT_MAX_TOKENS } from '@/lib/anthropic';
+import { generateChatCompletion, REPORT_MODEL, REPORT_MAX_TOKENS } from '@/lib/openrouter';
 import { buildUserPrompt, SYSTEM_PROMPT } from '@/lib/report-prompt';
 import { hashAssessment } from '@/engine/hash';
 import { trackEvent } from '@/lib/posthog';
@@ -17,15 +17,11 @@ async function generateWithRetry(assessment: NonNullable<Awaited<ReturnType<type
   let lastErr: unknown;
   for (let attempt = 1; attempt <= maxAttempts; attempt++) {
     try {
-      const message = await anthropic.messages.create({
-        model: REPORT_MODEL,
-        max_tokens: REPORT_MAX_TOKENS,
-        system: SYSTEM_PROMPT,
-        messages: [{ role: 'user', content: buildUserPrompt(assessment) }],
-      });
-      const content = message.content[0];
-      if (content.type !== 'text') throw new Error('Unexpected LLM response type');
-      return content.text;
+      return await generateChatCompletion(
+        SYSTEM_PROMPT,
+        buildUserPrompt(assessment),
+        REPORT_MAX_TOKENS,
+      );
     } catch (err) {
       lastErr = err;
       if (attempt < maxAttempts) {
