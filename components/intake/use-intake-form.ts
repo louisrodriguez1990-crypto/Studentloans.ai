@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
@@ -8,6 +8,8 @@ import { nanoid } from 'nanoid';
 import { IntakeDataSchema, type IntakeDataInput } from '@/lib/validations';
 
 const TOTAL_STEPS = 4;
+const DRAFT_KEY = 'intake_draft_v1';
+const DRAFT_TTL_MS = 24 * 60 * 60 * 1000; // 24 hours
 
 // Fields validated at each step (used for per-step validation before advancing)
 const STEP_FIELDS: (keyof IntakeDataInput)[][] = [
@@ -38,6 +40,33 @@ export function useIntakeForm() {
     },
     mode: 'onBlur',
   });
+
+  // Restore draft from localStorage on mount
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem(DRAFT_KEY);
+      if (!raw) return;
+      const { values, step: savedStep, savedAt } = JSON.parse(raw) as {
+        values: Partial<IntakeDataInput>;
+        step: number;
+        savedAt: number;
+      };
+      if (Date.now() - savedAt < DRAFT_TTL_MS && savedStep >= 1) {
+        form.reset({ loanTypes: [], intent: [], familySize: 1, yearsInRepayment: 0, disbursedAfterJuly2026: null, enrolledInSAVE: null, ...values });
+        setStep(Math.min(savedStep, TOTAL_STEPS));
+      }
+    } catch {}
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Save draft on every field change
+  useEffect(() => {
+    const sub = form.watch((values) => {
+      try {
+        localStorage.setItem(DRAFT_KEY, JSON.stringify({ values, step, savedAt: Date.now() }));
+      } catch {}
+    });
+    return () => sub.unsubscribe();
+  }, [form, step]);
 
   const goNext = useCallback(async () => {
     const fieldsToValidate = STEP_FIELDS[step - 1];
@@ -74,6 +103,7 @@ export function useIntakeForm() {
           throw new Error(err.error ?? 'Assessment failed. Please try again.');
         }
 
+        try { localStorage.removeItem(DRAFT_KEY); } catch {}
         router.push(`/assess/results?session=${sessionId}`);
       } catch (err) {
         setSubmitError(err instanceof Error ? err.message : 'Something went wrong.');

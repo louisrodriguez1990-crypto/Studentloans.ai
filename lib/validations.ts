@@ -57,7 +57,8 @@ export const ReportRequestSchema = z.object({
 export const SubscribeRequestSchema = z.object({
   email: z.string().email(),
   sessionId: z.string().min(1).max(64).optional(),
-  // Segment is derived server-side from the assessment; not trusted from client
+  // Direct segment (for tools like PSLF tracker that know the segment without an assessment)
+  segment: z.string().max(64).optional(),
 });
 
 export const TrackRequestSchema = z.object({

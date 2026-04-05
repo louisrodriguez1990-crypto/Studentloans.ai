@@ -5,8 +5,8 @@ export function Footer() {
   return (
     <footer className="border-t border-gray-200 bg-gray-50 mt-16">
       <div className="mx-auto max-w-5xl px-4 py-10">
-        <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
-          <div>
+        <div className="grid grid-cols-2 gap-8 md:grid-cols-5">
+          <div className="col-span-2 md:col-span-1">
             <p className="font-semibold text-gray-900">{SITE_NAME}</p>
             <p className="mt-2 text-xs text-gray-500">
               Policy information as of {POLICY_AS_OF_DATE}.
@@ -30,6 +30,43 @@ export function Footer() {
           </div>
 
           <div>
+            <p className="text-sm font-medium text-gray-700">Tools</p>
+            <ul className="mt-2 space-y-1.5 text-sm text-gray-500">
+              <li>
+                <Link href="/calculators/idr-payment" className="hover:text-gray-700">
+                  IDR Calculator
+                </Link>
+              </li>
+              <li>
+                <Link href="/calculators/refinance-savings" className="hover:text-gray-700">
+                  Refinance Calculator
+                </Link>
+              </li>
+              <li>
+                <Link href="/tools/pslf-tracker" className="hover:text-gray-700">
+                  PSLF Tracker
+                </Link>
+              </li>
+              <li>
+                <Link href="/compare/refinance-lenders" className="hover:text-gray-700">
+                  Compare Lenders
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <p className="text-sm font-medium text-gray-700">Servicers</p>
+            <ul className="mt-2 space-y-1.5 text-sm text-gray-500">
+              <li><Link href="/servicer/aidvantage" className="hover:text-gray-700">Aidvantage</Link></li>
+              <li><Link href="/servicer/mohela" className="hover:text-gray-700">MOHELA</Link></li>
+              <li><Link href="/servicer/nelnet" className="hover:text-gray-700">Nelnet</Link></li>
+              <li><Link href="/servicer/edfinancial" className="hover:text-gray-700">EdFinancial</Link></li>
+              <li><Link href="/servicer/great-lakes" className="hover:text-gray-700">Great Lakes</Link></li>
+            </ul>
+          </div>
+
+          <div>
             <p className="text-sm font-medium text-gray-700">Company</p>
             <ul className="mt-2 space-y-1.5 text-sm text-gray-500">
               <li>
@@ -37,12 +74,6 @@ export function Footer() {
                   About
                 </Link>
               </li>
-            </ul>
-          </div>
-
-          <div>
-            <p className="text-sm font-medium text-gray-700">Legal</p>
-            <ul className="mt-2 space-y-1.5 text-sm text-gray-500">
               <li>
                 <Link href="/privacy" className="hover:text-gray-700">
                   Privacy Policy

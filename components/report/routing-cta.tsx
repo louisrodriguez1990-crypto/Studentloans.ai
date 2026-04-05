@@ -17,24 +17,24 @@ interface CTAConfig {
 const CTA_CONFIG: Record<RoutingTag, CTAConfig> = {
   refinance_candidate: {
     icon: TrendingDown,
-    title: 'You may qualify for a lower rate',
+    title: 'Compare refinancing rates — 5 lenders',
     description:
-      'Based on your income and loan profile, refinancing to a private loan could lower your ' +
-      'monthly payment. Note: refinancing means giving up IDR plans and forgiveness protections permanently.',
-    actionLabel: 'See if you qualify at ELFI',
-    actionHref: 'https://www.elfi.com/?code=39533',
+      'Based on your income and employment, refinancing may lower your monthly payment. ' +
+      "Compare 5 lenders side-by-side — including rates, fees, and the federal benefits you'd give up.",
+    actionLabel: 'Compare rates from 5 lenders',
+    actionHref: '/compare/refinance-lenders',
     isAffiliate: true,
-    isExternal: true,
+    isExternal: false,
   },
   forgiveness_candidate: {
     icon: Award,
-    title: 'Check your PSLF payment count',
+    title: 'Track your PSLF qualifying payments',
     description:
-      "You appear eligible for Public Service Loan Forgiveness. Use the FSA's PSLF Help Tool " +
-      'to verify your employer and track your qualifying payments.',
-    actionLabel: 'Open PSLF Help Tool',
-    actionHref: 'https://studentaid.gov/pslf/',
-    isExternal: true,
+      'You appear eligible for Public Service Loan Forgiveness. Use our free PSLF Tracker ' +
+      'to log payments, estimate your forgiveness date, and stay on top of 2026 rule changes.',
+    actionLabel: 'Open PSLF Tracker',
+    actionHref: '/tools/pslf-tracker',
+    isExternal: false,
   },
   needs_specialist: {
     icon: Users,

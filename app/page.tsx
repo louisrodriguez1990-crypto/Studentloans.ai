@@ -1,11 +1,14 @@
 import Link from 'next/link';
 import type { Metadata } from 'next';
+import { createClient } from '@supabase/supabase-js';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { JsonLd, websiteSchema, organizationSchema } from '@/components/seo/json-ld';
 import { buildMetadata } from '@/components/seo/open-graph';
 import { BASE_URL, SITE_NAME } from '@/lib/constants';
-import { ArrowRight, CheckCircle, Shield, Zap } from 'lucide-react';
+import { ArrowRight, CheckCircle, Shield, Zap, Calculator, TrendingDown, Award, Users } from 'lucide-react';
+
+export const revalidate = 3600; // ISR: regenerate every hour for fresh assessment count
 
 export const metadata: Metadata = {
   ...buildMetadata({
@@ -26,7 +29,63 @@ export const metadata: Metadata = {
   ],
 };
 
-export default function HomePage() {
+async function getAssessmentCount(): Promise<number> {
+  try {
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    if (!supabaseUrl || !supabaseKey) return 0;
+
+    const supabase = createClient(supabaseUrl, supabaseKey);
+    const { count } = await supabase
+      .from('assessments')
+      .select('*', { count: 'exact', head: true });
+    return count ?? 0;
+  } catch {
+    return 0;
+  }
+}
+
+function formatCount(n: number): string {
+  if (n < 100) return ''; // not enough for social proof
+  if (n >= 1000) return `${Math.floor(n / 100) / 10}k+`;
+  return `${Math.floor(n / 10) * 10}+`;
+}
+
+const TOOLS = [
+  {
+    icon: Calculator,
+    title: 'IDR Payment Calculator',
+    description: 'Calculate your exact monthly payment under IBR, ICR, and other 2026-eligible plans.',
+    href: '/calculators/idr-payment',
+    color: 'bg-emerald-100 text-emerald-600',
+  },
+  {
+    icon: TrendingDown,
+    title: 'Refinance Savings Calculator',
+    description: 'See how much you could save by refinancing — and what federal protections you\'d give up.',
+    href: '/calculators/refinance-savings',
+    color: 'bg-blue-100 text-blue-600',
+  },
+  {
+    icon: Award,
+    title: 'PSLF Payment Tracker',
+    description: 'Track your 120 qualifying payments toward Public Service Loan Forgiveness.',
+    href: '/tools/pslf-tracker',
+    color: 'bg-violet-100 text-violet-600',
+  },
+  {
+    icon: Users,
+    title: 'Compare 5 Lenders',
+    description: 'Side-by-side comparison of refinance lenders — rates, fees, and the federal benefits you\'d lose.',
+    href: '/compare/refinance-lenders',
+    color: 'bg-amber-100 text-amber-600',
+  },
+];
+
+export default async function HomePage() {
+  const assessmentCount = await getAssessmentCount();
+  const countLabel = formatCount(assessmentCount);
+
   const softwareAppSchema = {
     '@context': 'https://schema.org',
     '@type': 'SoftwareApplication',
@@ -67,7 +126,7 @@ export default function HomePage() {
           </p>
 
           <p className="mt-5 text-xl text-gray-600">
-            Answer 4 questions. Get a personalized report — and a clear action plan.
+            Answer a few questions. Get a personalized report — and a clear action plan.
           </p>
 
           <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
@@ -86,7 +145,8 @@ export default function HomePage() {
           </div>
 
           <p className="mt-4 text-xs text-gray-400">
-            Free. No account. No email required to get your report.
+            Free · ~3 minutes · See your results instantly
+            {countLabel && ` · Join ${countLabel} borrowers who've checked`}
           </p>
         </div>
       </section>
@@ -179,6 +239,37 @@ export default function HomePage() {
               </CardContent>
             </Card>
           ))}
+        </div>
+      </section>
+
+      {/* Free tools section */}
+      <section className="bg-gray-50 border-t border-gray-100 px-4 py-16">
+        <div className="mx-auto max-w-5xl">
+          <div className="text-center mb-10">
+            <h2 className="text-2xl font-bold text-gray-900">Free tools for every situation</h2>
+            <p className="mt-3 text-gray-600 max-w-xl mx-auto">
+              Whether you need to calculate payments, track PSLF progress, or compare lenders —
+              all tools are free and require no account.
+            </p>
+          </div>
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {TOOLS.map((tool) => (
+              <Link key={tool.href} href={tool.href} className="group">
+                <div className="h-full rounded-xl border border-gray-200 bg-white p-6 transition-shadow hover:shadow-md">
+                  <div className={`inline-flex h-10 w-10 items-center justify-center rounded-full ${tool.color} mb-4`}>
+                    <tool.icon className="h-5 w-5" />
+                  </div>
+                  <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">
+                    {tool.title}
+                  </h3>
+                  <p className="mt-2 text-sm text-gray-600">{tool.description}</p>
+                  <span className="mt-4 inline-flex items-center text-sm text-blue-600 font-medium">
+                    Open tool <ArrowRight className="ml-1 h-4 w-4" />
+                  </span>
+                </div>
+              </Link>
+            ))}
+          </div>
         </div>
       </section>
 

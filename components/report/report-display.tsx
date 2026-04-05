@@ -6,6 +6,7 @@ import { ConfidenceBadge } from './confidence-badge';
 import { WarningsList } from './warnings-list';
 import { RoutingCTA } from './routing-cta';
 import { RegenerateButton } from './regenerate-button';
+import { ResultsEmailCapture } from './results-email-capture';
 import type { AssessmentResult, Report } from '@/engine/types';
 
 interface ReportDisplayProps {
@@ -40,6 +41,9 @@ export function ReportDisplay({ assessment, initialReport }: ReportDisplayProps)
         <h2 className="mb-4 text-base font-semibold text-gray-900">Your next steps</h2>
         <RoutingCTA routingTags={assessment.routingTags} />
       </div>
+
+      {/* Sticky email capture — appears after scrolling 60% */}
+      <ResultsEmailCapture sessionId={assessment.sessionId} routingTags={assessment.routingTags} />
     </div>
   );
 }

@@ -13,6 +13,13 @@ interface FormNavigationProps {
   isLastStep: boolean;
 }
 
+const STEP_ENCOURAGEMENT: Record<number, string> = {
+  1: '4 steps · ~3 minutes · no account required',
+  2: "You're halfway there!",
+  3: 'Almost done!',
+  4: 'Last step — then see your results instantly',
+};
+
 export function FormNavigation({
   step,
   totalSteps,
@@ -24,6 +31,7 @@ export function FormNavigation({
   return (
     <div className="space-y-4">
       <Progress current={step} total={totalSteps} />
+      <p className="text-center text-xs text-gray-400">{STEP_ENCOURAGEMENT[step]}</p>
 
       <div className="flex items-center justify-between">
         <Button
