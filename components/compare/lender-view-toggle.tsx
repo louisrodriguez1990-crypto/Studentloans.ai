@@ -85,18 +85,26 @@ export function LenderViewToggle({ lenders }: LenderViewToggleProps) {
                   </ul>
                 </div>
                 <div className="sm:shrink-0">
-                  <a
-                    href={lender.affiliateHref}
-                    target="_blank"
-                    rel={`noopener noreferrer nofollow${lender.isAffiliate ? ' sponsored' : ''}`}
-                    className="inline-flex items-center gap-2 rounded-lg bg-emerald-600 px-5 py-3 text-sm font-semibold text-white hover:bg-emerald-700 transition-colors"
-                  >
-                    {lender.ctaLabel}
-                    <ExternalLink className="h-4 w-4" />
-                  </a>
-                  <p className="mt-2 text-xs text-gray-400 text-center">
-                    Soft credit check · No commitment
-                  </p>
+                  {lender.isAffiliate ? (
+                    <>
+                      <a
+                        href={lender.affiliateHref}
+                        target="_blank"
+                        rel="noopener noreferrer nofollow sponsored"
+                        className="inline-flex items-center gap-2 rounded-lg bg-emerald-600 px-5 py-3 text-sm font-semibold text-white hover:bg-emerald-700 transition-colors"
+                      >
+                        {lender.ctaLabel}
+                        <ExternalLink className="h-4 w-4" />
+                      </a>
+                      <p className="mt-2 text-xs text-gray-400 text-center">
+                        Soft credit check · No commitment
+                      </p>
+                    </>
+                  ) : (
+                    <span className="inline-block rounded-lg border border-gray-200 px-5 py-3 text-sm font-medium text-gray-400 bg-gray-50 cursor-default">
+                      For reference only
+                    </span>
+                  )}
                 </div>
               </div>
             </div>
@@ -132,21 +140,25 @@ export function LenderViewToggle({ lenders }: LenderViewToggleProps) {
                   <td className="px-4 py-3 text-gray-700">${(lender.maxLoanAmount / 1000).toFixed(0)}K</td>
                   <td className="px-4 py-3 text-gray-600 max-w-[200px]">{lender.features[0]}</td>
                   <td className="px-4 py-3">
-                    <a
-                      href={lender.affiliateHref}
-                      target="_blank"
-                      rel={`noopener noreferrer nofollow${lender.isAffiliate ? ' sponsored' : ''}`}
-                      className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-emerald-700 whitespace-nowrap"
-                    >
-                      Check rate <ExternalLink className="h-3.5 w-3.5" />
-                    </a>
+                    {lender.isAffiliate ? (
+                      <a
+                        href={lender.affiliateHref}
+                        target="_blank"
+                        rel="noopener noreferrer nofollow sponsored"
+                        className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-emerald-700 whitespace-nowrap"
+                      >
+                        Check rate <ExternalLink className="h-3.5 w-3.5" />
+                      </a>
+                    ) : (
+                      <span className="text-xs text-gray-400">Reference only</span>
+                    )}
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
           <p className="px-4 py-3 text-xs text-gray-400 border-t border-gray-100">
-            Soft credit check only · No commitment to apply
+            Only lenders marked as partners have active referral links.
           </p>
         </div>
       )}

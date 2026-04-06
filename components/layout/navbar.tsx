@@ -95,7 +95,8 @@ export function Navbar() {
             href="/assess"
             className="rounded-full bg-teal-600 px-5 py-2 text-sm font-medium text-white hover:bg-teal-700 transition-colors"
           >
-            Get My Assessment
+            <span className="sm:hidden">Start</span>
+            <span className="hidden sm:inline">Get My Assessment</span>
           </Link>
         </div>
 

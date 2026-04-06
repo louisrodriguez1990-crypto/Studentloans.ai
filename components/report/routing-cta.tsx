@@ -38,12 +38,12 @@ const CTA_CONFIG: Record<RoutingTag, CTAConfig> = {
   },
   needs_specialist: {
     icon: Users,
-    title: 'Talk to a student-loan advisor',
+    title: 'Get matched with a student loan advisor',
     description:
       'Your situation has complexity that benefits from personalized guidance. ' +
-      'A fee-only student loan advisor can review your full picture.',
-    actionLabel: 'Find an advisor',
-    actionHref: '/compare/forgiveness-paths',
+      'We\'ll match you with a fee-only advisor who can review your full picture — free to request.',
+    actionLabel: 'Request an advisor match',
+    actionHref: '/advisors',
   },
   confusion_high: {
     icon: Mail,

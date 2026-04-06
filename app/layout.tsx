@@ -12,7 +12,7 @@ export const metadata: Metadata = {
     template: `%s | ${SITE_NAME}`,
   },
   description:
-    'Understand how 2026 federal student loan policy changes affect you personally. Free, personalized assessment powered by a deterministic rules engine.',
+    'Understand how 2026 federal student loan policy changes affect you. Get a free, personalized report in 3 minutes. No jargon. No guessing. Just answers.',
   metadataBase: new URL(BASE_URL),
   openGraph: {
     siteName: SITE_NAME,

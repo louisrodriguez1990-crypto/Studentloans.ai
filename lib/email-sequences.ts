@@ -316,25 +316,26 @@ export const DRIP_SEQUENCES: Record<string, Drip[]> = {
   needs_specialist: [
     {
       delayDays: 3,
-      subject: 'Your student loan situation is complex — here\'s a free resource',
+      subject: 'Your student loan situation may need a specialist — here\'s how we can help',
       html: wrap(`
         <h2 style="font-size: 20px; font-weight: 700; margin-bottom: 8px;">
-          When to get personalized help with your student loans
+          Some situations need more than a calculator
         </h2>
-        <p>Some student loan situations genuinely need more than a calculator or a guide.
-        Signs you might benefit from professional advice:</p>
+        <p>Based on your assessment, your situation has some complexity that benefits from
+        one-on-one guidance. Signs you'd benefit from a specialist:</p>
         <ul>
-          <li>You have both federal and private loans and aren't sure what to do with each</li>
-          <li>You're considering refinancing but also might qualify for PSLF</li>
-          <li>You're in default or facing serious financial hardship</li>
-          <li>You have Parent PLUS loans and want to understand consolidation options</li>
-          <li>You're self-employed with variable income and IDR recertification is complicated</li>
+          <li>You have both federal and private loans and aren't sure what to tackle first</li>
+          <li>You're weighing PSLF eligibility against refinancing</li>
+          <li>You're in default or behind on payments</li>
+          <li>You have Parent PLUS loans</li>
+          <li>You're self-employed with variable income for IDR recertification</li>
         </ul>
-        <p>A fee-only student loan advisor (not a commission-based loan company) can review
-        your full picture. The Student Loan Planner and SALT Money offer free resources.</p>
+        <p>We match borrowers with <strong>fee-only</strong> student loan advisors —
+        no commission-based salespeople. Free to request, 1–2 day response.</p>
         <p>
-          <a href="${BASE_URL}/compare/forgiveness-paths" style="color: #059669;">
-            → Compare federal forgiveness options for complex situations
+          <a href="${BASE_URL}/advisors"
+             style="display: inline-block; background: #059669; color: white; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 600;">
+            Request an advisor match →
           </a>
         </p>
       `),
@@ -359,9 +360,12 @@ export const DRIP_SEQUENCES: Record<string, Drip[]> = {
         <p><strong>5. What if I have both federal and private loans?</strong><br/>
         Treat them separately. Keep federal loans federal (for IDR/forgiveness). Consider
         refinancing private loans only.</p>
+        <p style="margin-top: 20px;">
+          Still not sure what to do? We can match you with a fee-only advisor.
+        </p>
         <p>
-          <a href="${BASE_URL}/faq" style="color: #059669;">
-            → See the full FAQ
+          <a href="${BASE_URL}/advisors" style="color: #059669;">
+            → Request a free advisor match
           </a>
         </p>
       `),
