@@ -129,7 +129,7 @@ export function Navbar() {
                 key={href}
                 href={href}
                 onClick={() => setMobileOpen(false)}
-                className="flex items-center gap-3 py-2.5 text-sm text-gray-700 hover:text-blue-600"
+                className="flex items-center gap-3 py-2.5 text-sm text-gray-700 hover:text-teal-600"
               >
                 <Icon className="h-4 w-4 text-gray-400 shrink-0" />
                 {label}
@@ -144,7 +144,7 @@ export function Navbar() {
                 key={href}
                 href={href}
                 onClick={() => setMobileOpen(false)}
-                className="block py-2.5 text-sm text-gray-700 hover:text-blue-600"
+                className="block py-2.5 text-sm text-gray-700 hover:text-teal-600"
               >
                 {label}
               </Link>
