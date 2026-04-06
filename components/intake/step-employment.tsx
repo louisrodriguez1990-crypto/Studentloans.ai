@@ -24,7 +24,7 @@ export function StepEmployment({ form }: StepEmploymentProps) {
   return (
     <div className="space-y-8">
       <div>
-        <h2 className="text-xl font-semibold text-gray-900">A few 2026-specific questions</h2>
+        <h2 className="text-xl font-semibold text-[#1a1f36]">A few 2026-specific questions</h2>
         <p className="mt-1 text-sm text-gray-500">
           Recent policy changes hinge on specific dates. These help us apply the right rules.
         </p>
@@ -32,7 +32,7 @@ export function StepEmployment({ form }: StepEmploymentProps) {
 
       {/* Disbursement date */}
       <div>
-        <h3 className="text-base font-medium text-gray-900">
+        <h3 className="text-base font-medium text-[#1a1f36]">
           Were any of your loans first disbursed or consolidated on or after July 1, 2026?
         </h3>
         <p className="mt-0.5 text-xs text-gray-500">
@@ -50,7 +50,7 @@ export function StepEmployment({ form }: StepEmploymentProps) {
               onClick={() => setDisbursed(opt.value)}
               className={`rounded-lg border px-4 py-2 text-sm transition-colors ${
                 disbursed === opt.value
-                  ? 'border-blue-500 bg-blue-50 font-medium text-blue-700'
+                  ? 'border-[#00C9A7] bg-[#e6faf6] font-medium text-[#00b396]'
                   : 'border-gray-200 text-gray-700 hover:border-gray-300'
               }`}
             >
@@ -65,7 +65,7 @@ export function StepEmployment({ form }: StepEmploymentProps) {
 
       {/* SAVE enrollment */}
       <div>
-        <h3 className="text-base font-medium text-gray-900">
+        <h3 className="text-base font-medium text-[#1a1f36]">
           Are you currently enrolled in the SAVE Plan (Saving on a Valuable Education)?
         </h3>
         <p className="mt-0.5 text-xs text-gray-500">
@@ -84,7 +84,7 @@ export function StepEmployment({ form }: StepEmploymentProps) {
               onClick={() => setEnrolledInSAVE(opt.value)}
               className={`rounded-lg border px-4 py-2 text-sm transition-colors ${
                 enrolledInSAVE === opt.value
-                  ? 'border-blue-500 bg-blue-50 font-medium text-blue-700'
+                  ? 'border-[#00C9A7] bg-[#e6faf6] font-medium text-[#00b396]'
                   : 'border-gray-200 text-gray-700 hover:border-gray-300'
               }`}
             >

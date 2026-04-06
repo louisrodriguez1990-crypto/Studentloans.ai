@@ -31,7 +31,7 @@ export function StepFinancial({ form }: StepFinancialProps) {
   return (
     <div className="space-y-8">
       <div>
-        <h2 className="text-xl font-semibold text-gray-900">Your financial situation</h2>
+        <h2 className="text-xl font-semibold text-[#1a1f36]">Your financial situation</h2>
         <p className="mt-1 text-sm text-gray-500">
           This helps determine which repayment options apply to you.
         </p>
@@ -39,20 +39,20 @@ export function StepFinancial({ form }: StepFinancialProps) {
 
       {/* Employment type */}
       <div>
-        <h3 className="text-base font-medium text-gray-900">Employment type</h3>
+        <h3 className="text-base font-medium text-[#1a1f36]">Employment type</h3>
         <div className="mt-3 space-y-2">
           {EMPLOYMENT_OPTIONS.map((opt) => (
             <label
               key={opt.value}
               className={`flex cursor-pointer items-center gap-3 rounded-lg border p-3 text-sm transition-colors ${
                 selectedEmployment === opt.value
-                  ? 'border-blue-500 bg-blue-50 font-medium text-blue-700'
+                  ? 'border-[#00C9A7] bg-[#e6faf6] font-medium text-[#00b396]'
                   : 'border-gray-200 text-gray-700 hover:border-gray-300'
               }`}
             >
               <input
                 type="radio"
-                className="h-4 w-4 border-gray-300 text-blue-600"
+                className="h-4 w-4 border-gray-300 accent-[#00C9A7]"
                 value={opt.value}
                 {...register('employmentType')}
               />
@@ -67,14 +67,14 @@ export function StepFinancial({ form }: StepFinancialProps) {
 
       {/* Annual income */}
       <div>
-        <h3 className="text-base font-medium text-gray-900">Approximate annual income</h3>
+        <h3 className="text-base font-medium text-[#1a1f36]">Approximate annual income</h3>
         <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3">
           {INCOME_OPTIONS.map((opt) => (
             <label
               key={opt.value}
               className={`flex cursor-pointer items-center justify-center rounded-lg border p-3 text-sm transition-colors ${
                 selectedIncome === opt.value
-                  ? 'border-blue-500 bg-blue-50 font-medium text-blue-700'
+                  ? 'border-[#00C9A7] bg-[#e6faf6] font-medium text-[#00b396]'
                   : 'border-gray-200 text-gray-700 hover:border-gray-300'
               }`}
             >
@@ -95,7 +95,7 @@ export function StepFinancial({ form }: StepFinancialProps) {
 
       {/* Family size */}
       <div>
-        <label className="text-base font-medium text-gray-900" htmlFor="familySize">
+        <label className="text-base font-medium text-[#1a1f36]" htmlFor="familySize">
           Family size (including yourself)
         </label>
         <p className="mt-0.5 text-xs text-gray-500">
@@ -106,7 +106,7 @@ export function StepFinancial({ form }: StepFinancialProps) {
           type="number"
           min={1}
           max={20}
-          className="mt-2 block w-24 rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+          className="mt-2 block w-24 rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-[#00C9A7] focus:outline-none focus:ring-1 focus:ring-[#00C9A7]/30"
           {...register('familySize', { valueAsNumber: true })}
         />
         {errors.familySize && (
@@ -116,7 +116,7 @@ export function StepFinancial({ form }: StepFinancialProps) {
 
       {/* Years in repayment */}
       <div>
-        <label className="text-base font-medium text-gray-900" htmlFor="yearsInRepayment">
+        <label className="text-base font-medium text-[#1a1f36]" htmlFor="yearsInRepayment">
           Years since you first entered repayment
         </label>
         <p className="mt-0.5 text-xs text-gray-500">
@@ -127,7 +127,7 @@ export function StepFinancial({ form }: StepFinancialProps) {
           type="number"
           min={0}
           max={40}
-          className="mt-2 block w-24 rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+          className="mt-2 block w-24 rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-[#00C9A7] focus:outline-none focus:ring-1 focus:ring-[#00C9A7]/30"
           {...register('yearsInRepayment', { valueAsNumber: true })}
         />
         {errors.yearsInRepayment && (

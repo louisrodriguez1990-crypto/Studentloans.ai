@@ -70,7 +70,7 @@ export function StepLoanTypes({ form }: StepLoanTypesProps) {
   return (
     <div className="space-y-8">
       <div>
-        <h2 className="text-xl font-semibold text-gray-900">What types of student loans do you have?</h2>
+        <h2 className="text-xl font-semibold text-[#1a1f36]">What types of student loans do you have?</h2>
         <p className="mt-1 text-sm text-gray-500">Select all that apply.</p>
       </div>
 
@@ -81,18 +81,18 @@ export function StepLoanTypes({ form }: StepLoanTypesProps) {
             key={opt.value}
             className={`flex cursor-pointer items-start gap-3 rounded-lg border p-4 transition-colors ${
               selectedTypes.includes(opt.value)
-                ? 'border-blue-500 bg-blue-50'
+                ? 'border-[#00C9A7] bg-[#e6faf6]'
                 : 'border-gray-200 hover:border-gray-300'
             }`}
           >
             <input
               type="checkbox"
-              className="mt-0.5 h-4 w-4 rounded border-gray-300 text-blue-600"
+              className="mt-0.5 h-4 w-4 rounded border-gray-300 accent-[#00C9A7]"
               checked={selectedTypes.includes(opt.value)}
               onChange={() => toggleLoanType(opt.value)}
             />
             <div>
-              <p className="text-sm font-medium text-gray-900">{opt.label}</p>
+              <p className="text-sm font-medium text-[#1a1f36]">{opt.label}</p>
               <p className="text-xs text-gray-500">{opt.description}</p>
             </div>
           </label>
@@ -104,14 +104,14 @@ export function StepLoanTypes({ form }: StepLoanTypesProps) {
 
       {/* Balance range */}
       <div>
-        <h3 className="text-base font-medium text-gray-900">Approximate total balance</h3>
+        <h3 className="text-base font-medium text-[#1a1f36]">Approximate total balance</h3>
         <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3">
           {BALANCE_OPTIONS.map((opt) => (
             <label
               key={opt.value}
               className={`flex cursor-pointer items-center justify-center rounded-lg border p-3 text-sm transition-colors ${
                 selectedBalance === opt.value
-                  ? 'border-blue-500 bg-blue-50 font-medium text-blue-700'
+                  ? 'border-[#00C9A7] bg-[#e6faf6] font-medium text-[#00b396]'
                   : 'border-gray-200 text-gray-700 hover:border-gray-300'
               }`}
             >
@@ -132,20 +132,20 @@ export function StepLoanTypes({ form }: StepLoanTypesProps) {
 
       {/* Repayment status */}
       <div>
-        <h3 className="text-base font-medium text-gray-900">Current repayment status</h3>
+        <h3 className="text-base font-medium text-[#1a1f36]">Current repayment status</h3>
         <div className="mt-3 space-y-2">
           {STATUS_OPTIONS.map((opt) => (
             <label
               key={opt.value}
               className={`flex cursor-pointer items-center gap-3 rounded-lg border p-3 text-sm transition-colors ${
                 selectedStatus === opt.value
-                  ? 'border-blue-500 bg-blue-50 font-medium text-blue-700'
+                  ? 'border-[#00C9A7] bg-[#e6faf6] font-medium text-[#00b396]'
                   : 'border-gray-200 text-gray-700 hover:border-gray-300'
               }`}
             >
               <input
                 type="radio"
-                className="h-4 w-4 border-gray-300 text-blue-600"
+                className="h-4 w-4 border-gray-300 accent-[#00C9A7]"
                 value={opt.value}
                 {...register('repaymentStatus')}
               />
