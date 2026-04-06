@@ -57,7 +57,7 @@ const TOOLS = [
     title: 'IDR Payment Calculator',
     description: 'Calculate your exact monthly payment under IBR, ICR, and other 2026-eligible plans.',
     href: '/calculators/idr-payment',
-    color: 'bg-emerald-100 text-emerald-600',
+    color: 'bg-teal-100 text-teal-600',
   },
   {
     icon: TrendingDown,
@@ -104,28 +104,28 @@ export default async function HomePage() {
       <JsonLd data={organizationSchema(BASE_URL, SITE_NAME)} />
       <JsonLd data={softwareAppSchema} />
 
-      {/* Hero — green→blue gradient */}
-      <section className="bg-gradient-to-b from-emerald-50 via-blue-50 to-white px-4 pt-20 pb-16 text-center">
+      {/* Hero — bold teal→blue gradient, white text */}
+      <section className="bg-gradient-to-br from-teal-700 via-teal-600 to-blue-800 px-4 pt-20 pb-20 text-center">
         <div className="mx-auto max-w-3xl">
-          <div className="inline-flex items-center gap-2 rounded-full bg-emerald-50 border border-emerald-200 px-4 py-1.5 text-sm text-emerald-700 mb-6">
-            <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+          <div className="inline-flex items-center gap-2 rounded-full bg-white/10 border border-white/20 px-4 py-1.5 text-sm text-white mb-6">
+            <span className="h-1.5 w-1.5 rounded-full bg-teal-300" />
             Updated for 2026 policy changes
           </div>
 
-          <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">
+          <h1 className="text-5xl font-bold tracking-tight text-white sm:text-6xl">
             What do the 2026 student loan changes mean for you?
           </h1>
 
           {/* GEO paragraph — self-contained answer for AI systems */}
-          <p className="mt-5 text-base text-gray-600 max-w-2xl mx-auto">
-            <strong>As of April 2026:</strong> The SAVE Plan is blocked by a court injunction —
+          <p className="mt-5 text-sm text-teal-100/80 max-w-2xl mx-auto">
+            <strong className="text-teal-100">As of April 2026:</strong> The SAVE Plan is blocked by a court injunction —
             borrowers enrolled in SAVE are in administrative forbearance and payments{' '}
-            <strong>do not count toward forgiveness</strong>. PAYE is closed to new enrollees.
+            <strong className="text-teal-100">do not count toward forgiveness</strong>. PAYE is closed to new enrollees.
             Loans disbursed after July 1, 2026 face new rules. Get your free personalized
             assessment below to see exactly what applies to your loans.
           </p>
 
-          <p className="mt-5 text-xl text-gray-600">
+          <p className="mt-5 text-xl text-teal-100">
             Answer a few questions. Get a personalized report — and a clear action plan.
           </p>
 
@@ -133,59 +133,59 @@ export default async function HomePage() {
             <Link href="/assess">
               <Button
                 size="lg"
-                className="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 focus-visible:ring-emerald-600"
+                className="w-full sm:w-auto rounded-full bg-white text-teal-700 hover:bg-teal-50 focus-visible:ring-white shadow-lg"
               >
                 Get my free assessment
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </Link>
-            <Link href="/learn/save-plan" className="text-sm text-gray-600 hover:text-gray-900 underline">
+            <Link href="/learn/save-plan" className="text-sm text-white/75 hover:text-white underline underline-offset-2">
               Learn about the SAVE Plan changes
             </Link>
           </div>
 
-          <p className="mt-4 text-xs text-gray-400">
+          <p className="mt-5 text-xs text-teal-200/80">
             Free · ~3 minutes · See your results instantly
             {countLabel && ` · Join ${countLabel} borrowers who've checked`}
           </p>
         </div>
       </section>
 
-      {/* Trust signals — colored icon circles */}
-      <section className="border-t-2 border-emerald-100 bg-gray-50 py-12">
+      {/* Trust signals */}
+      <section className="border-b border-gray-100 bg-white py-14">
         <div className="mx-auto max-w-5xl px-4">
-          <div className="grid gap-6 sm:grid-cols-3">
+          <div className="grid gap-8 sm:grid-cols-3">
             <div className="flex items-start gap-4">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-emerald-100">
-                <Zap className="h-5 w-5 text-emerald-600" />
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-teal-100">
+                <Zap className="h-6 w-6 text-teal-600" />
               </div>
               <div>
-                <p className="font-medium text-gray-900">Straight answers, not guesses</p>
-                <p className="mt-1 text-sm text-gray-600">
+                <p className="font-semibold text-gray-900">Straight answers, not guesses</p>
+                <p className="mt-1 text-sm text-gray-500">
                   We apply the same federal eligibility rules your servicer uses — and show you
                   exactly why we reached each conclusion.
                 </p>
               </div>
             </div>
             <div className="flex items-start gap-4">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-blue-100">
-                <Shield className="h-5 w-5 text-blue-600" />
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-blue-100">
+                <Shield className="h-6 w-6 text-blue-600" />
               </div>
               <div>
-                <p className="font-medium text-gray-900">Your privacy is protected</p>
-                <p className="mt-1 text-sm text-gray-600">
+                <p className="font-semibold text-gray-900">Your privacy is protected</p>
+                <p className="mt-1 text-sm text-gray-500">
                   No account required. We never collect your name or SSN. All sessions are
                   anonymous by default.
                 </p>
               </div>
             </div>
             <div className="flex items-start gap-4">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-violet-100">
-                <CheckCircle className="h-5 w-5 text-violet-600" />
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-violet-100">
+                <CheckCircle className="h-6 w-6 text-violet-600" />
               </div>
               <div>
-                <p className="font-medium text-gray-900">Cites the actual sources</p>
-                <p className="mt-1 text-sm text-gray-600">
+                <p className="font-semibold text-gray-900">Cites the actual sources</p>
+                <p className="mt-1 text-sm text-gray-500">
                   Every recommendation links to the authoritative federal source. Verify anything
                   we tell you.
                 </p>
@@ -198,7 +198,7 @@ export default async function HomePage() {
       {/* What changed in 2026 — colored left-border cards */}
       <section className="mx-auto max-w-3xl px-4 py-16">
         <h2 className="text-2xl font-bold text-gray-900">What changed in 2026</h2>
-        <p className="mt-3 text-gray-600">
+        <p className="mt-3 text-gray-500">
           Federal student loan policy has seen more changes in the past two years than in the
           previous decade. Here are the most important ones.
         </p>
@@ -226,15 +226,15 @@ export default async function HomePage() {
               accent: 'border-l-violet-400',
             },
           ].map((item) => (
-            <Card key={item.title} className={`border-l-4 ${item.accent}`}>
+            <Card key={item.title} className={`border-l-[5px] ${item.accent} transition-shadow hover:shadow-md`}>
               <CardContent className="p-5">
                 <h3 className="font-semibold text-gray-900">{item.title}</h3>
-                <p className="mt-1 text-sm text-gray-600">{item.detail}</p>
+                <p className="mt-1 text-sm text-gray-500">{item.detail}</p>
                 <Link
                   href={item.href}
-                  className="mt-2 inline-block text-sm text-blue-600 hover:text-blue-700 underline"
+                  className="mt-2 inline-block text-sm text-teal-600 hover:text-teal-700 font-medium"
                 >
-                  Learn more
+                  Learn more →
                 </Link>
               </CardContent>
             </Card>
@@ -247,7 +247,7 @@ export default async function HomePage() {
         <div className="mx-auto max-w-5xl">
           <div className="text-center mb-10">
             <h2 className="text-2xl font-bold text-gray-900">Free tools for every situation</h2>
-            <p className="mt-3 text-gray-600 max-w-xl mx-auto">
+            <p className="mt-3 text-gray-500 max-w-xl mx-auto">
               Whether you need to calculate payments, track PSLF progress, or compare lenders —
               all tools are free and require no account.
             </p>
@@ -255,15 +255,15 @@ export default async function HomePage() {
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {TOOLS.map((tool) => (
               <Link key={tool.href} href={tool.href} className="group">
-                <div className="h-full rounded-xl border border-gray-200 bg-white p-6 transition-shadow hover:shadow-md">
-                  <div className={`inline-flex h-10 w-10 items-center justify-center rounded-full ${tool.color} mb-4`}>
-                    <tool.icon className="h-5 w-5" />
+                <div className="h-full rounded-xl border border-gray-200 bg-white p-6 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg">
+                  <div className={`inline-flex h-12 w-12 items-center justify-center rounded-full ${tool.color} mb-4`}>
+                    <tool.icon className="h-6 w-6" />
                   </div>
-                  <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">
+                  <h3 className="font-semibold text-gray-900 group-hover:text-teal-600 transition-colors">
                     {tool.title}
                   </h3>
-                  <p className="mt-2 text-sm text-gray-600">{tool.description}</p>
-                  <span className="mt-4 inline-flex items-center text-sm text-blue-600 font-medium">
+                  <p className="mt-2 text-sm text-gray-500">{tool.description}</p>
+                  <span className="mt-4 inline-flex items-center text-sm text-teal-600 font-medium">
                     Open tool <ArrowRight className="ml-1 h-4 w-4" />
                   </span>
                 </div>
@@ -273,20 +273,20 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* CTA band — emerald→blue gradient */}
-      <section className="bg-gradient-to-r from-emerald-600 to-blue-600 py-16 text-center">
+      {/* CTA band — teal→blue gradient */}
+      <section className="bg-gradient-to-br from-teal-700 via-teal-600 to-blue-800 py-20 text-center">
         <div className="mx-auto max-w-xl px-4">
-          <h2 className="text-2xl font-bold text-white">
+          <h2 className="text-3xl font-bold text-white">
             See exactly how these changes affect your loans
           </h2>
-          <p className="mt-3 text-emerald-100">
+          <p className="mt-4 text-teal-100">
             Our assessment takes 3 minutes and gives you a personalized report — not generic
             advice.
           </p>
           <Link href="/assess" className="mt-8 inline-block">
             <Button
               size="lg"
-              className="bg-white text-emerald-700 hover:bg-emerald-50 focus-visible:ring-white"
+              className="rounded-full bg-white text-teal-700 hover:bg-teal-50 focus-visible:ring-white shadow-lg"
             >
               Start free assessment
               <ArrowRight className="ml-2 h-5 w-5" />

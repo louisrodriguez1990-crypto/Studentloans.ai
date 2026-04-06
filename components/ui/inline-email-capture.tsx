@@ -56,9 +56,9 @@ export function InlineEmailCapture({
   }
 
   return (
-    <div className="mt-6 rounded-lg border border-blue-200 bg-blue-50 p-4">
+    <div className="mt-6 rounded-lg border border-teal-200 bg-teal-50 p-4">
       <div className="flex items-start gap-2">
-        <Bell className="h-4 w-4 text-blue-600 shrink-0 mt-0.5" />
+        <Bell className="h-4 w-4 text-teal-600 shrink-0 mt-0.5" />
         <div className="flex-1">
           <p className="text-sm font-medium text-gray-800 mb-2">{prompt}</p>
           <form onSubmit={handleSubmit} className="flex gap-2">
@@ -67,12 +67,12 @@ export function InlineEmailCapture({
               placeholder="your@email.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="flex-1 rounded-md border border-gray-300 bg-white px-3 py-1.5 text-sm focus:border-blue-500 focus:outline-none"
+              className="flex-1 rounded-md border border-gray-300 bg-white px-3 py-1.5 text-sm focus:border-teal-500 focus:outline-none"
             />
             <button
               type="submit"
               disabled={loading}
-              className="rounded-md bg-blue-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-60 shrink-0"
+              className="rounded-full bg-teal-600 px-4 py-1.5 text-sm font-medium text-white hover:bg-teal-700 disabled:opacity-60 shrink-0 transition-colors"
             >
               {loading ? '…' : buttonLabel}
             </button>
