@@ -11,14 +11,18 @@ export const metadata: Metadata = buildMetadata({
 
 export default function AssessPage() {
   return (
-    <div className="mx-auto max-w-2xl px-4 py-12">
-      <div className="mb-8 text-center">
-        <h1 className="text-2xl font-bold text-gray-900">Your personalized assessment</h1>
-        <p className="mt-2 text-gray-600">
+    <>
+      {/* Page header band — matches homepage hero */}
+      <div className="bg-gradient-to-br from-teal-700 via-teal-600 to-blue-800 px-4 py-10 text-center">
+        <h1 className="text-2xl font-bold text-white sm:text-3xl">Your personalized assessment</h1>
+        <p className="mt-2 text-sm text-teal-100">
           ~3 minutes · no account required
         </p>
       </div>
-      <ChatIntake />
-    </div>
+
+      <div className="mx-auto max-w-2xl px-4 py-10">
+        <ChatIntake />
+      </div>
+    </>
   );
 }

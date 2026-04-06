@@ -51,7 +51,7 @@ export function Navbar() {
         aria-label="Main navigation"
       >
         {/* Logo */}
-        <Link href="/" className="text-lg font-bold text-gray-900 hover:text-blue-600">
+        <Link href="/" className="text-lg font-extrabold text-gray-900 hover:text-teal-600 transition-colors">
           {SITE_NAME}
         </Link>
 
@@ -69,7 +69,7 @@ export function Navbar() {
               <ChevronDown className={`h-4 w-4 transition-transform ${toolsOpen ? 'rotate-180' : ''}`} />
             </button>
             {toolsOpen && (
-              <div className="absolute left-0 top-full z-50 mt-2 w-56 rounded-lg border border-gray-200 bg-white py-1 shadow-lg">
+              <div className="absolute left-0 top-full z-50 mt-2 w-56 rounded-xl border border-gray-200 bg-white py-1 shadow-xl">
                 {TOOLS_LINKS.map(({ href, label, icon: Icon }) => (
                   <Link
                     key={href}
@@ -93,7 +93,7 @@ export function Navbar() {
 
           <Link
             href="/assess"
-            className="rounded-lg bg-emerald-600 px-3 py-2 sm:px-4 text-sm font-medium text-white hover:bg-emerald-700"
+            className="rounded-full bg-teal-600 px-5 py-2 text-sm font-medium text-white hover:bg-teal-700 transition-colors"
           >
             <span className="sm:hidden">Start</span>
             <span className="hidden sm:inline">Get My Assessment</span>
@@ -104,7 +104,7 @@ export function Navbar() {
         <div className="flex sm:hidden items-center gap-3">
           <Link
             href="/assess"
-            className="rounded-lg bg-blue-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-blue-700"
+            className="rounded-full bg-teal-600 px-4 py-1.5 text-xs font-medium text-white hover:bg-teal-700 transition-colors"
           >
             Free Assessment
           </Link>
@@ -130,7 +130,7 @@ export function Navbar() {
                 key={href}
                 href={href}
                 onClick={() => setMobileOpen(false)}
-                className="flex items-center gap-3 py-2.5 text-sm text-gray-700 hover:text-blue-600"
+                className="flex items-center gap-3 py-2.5 text-sm text-gray-700 hover:text-teal-600"
               >
                 <Icon className="h-4 w-4 text-gray-400 shrink-0" />
                 {label}
@@ -145,7 +145,7 @@ export function Navbar() {
                 key={href}
                 href={href}
                 onClick={() => setMobileOpen(false)}
-                className="block py-2.5 text-sm text-gray-700 hover:text-blue-600"
+                className="block py-2.5 text-sm text-gray-700 hover:text-teal-600"
               >
                 {label}
               </Link>
