@@ -1,9 +1,10 @@
 'use client';
 
 import { useRef, useEffect } from 'react';
-import { useChatIntake, QUESTIONS } from './use-chat-intake';
+import { useChatIntake } from './use-chat-intake';
 import { ChatBubble } from './chat-bubble';
-import { Loader2 } from 'lucide-react';
+import { Progress } from '@/components/ui/progress';
+import { Loader2, Lock, CheckCircle2 } from 'lucide-react';
 
 export function ChatIntake() {
   const {
@@ -33,22 +34,14 @@ export function ChatIntake() {
     endRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
-  const progress = Math.min((currentQuestionIndex / totalQuestions) * 100, 100);
-
   return (
     <div className="mx-auto max-w-2xl">
       {/* Progress bar */}
-      <div className="h-1.5 bg-gray-200 rounded-full mb-6">
-        <div
-          className="h-1.5 bg-emerald-500 rounded-full transition-all duration-500"
-          style={{ width: `${progress}%` }}
-        />
-      </div>
-
-      {/* Step counter */}
-      <p className="text-xs text-gray-400 text-right mb-4">
-        {Math.min(currentQuestionIndex + 1, totalQuestions)} of {totalQuestions}
-      </p>
+      <Progress
+        current={Math.min(currentQuestionIndex + 1, totalQuestions)}
+        total={totalQuestions}
+        className="mb-6"
+      />
 
       {/* Message thread */}
       <div className="space-y-3 min-h-[300px] max-h-[55vh] overflow-y-auto pb-4 px-2">
@@ -132,7 +125,7 @@ function AnswerArea({
             key={opt.value}
             type="button"
             onClick={() => onSingleSelect(opt.value, opt.label)}
-            className="rounded-full border border-gray-300 bg-white px-4 py-2 text-sm text-gray-700 hover:border-emerald-500 hover:bg-emerald-50 hover:text-emerald-700 transition-colors"
+            className="rounded-full border border-gray-300 bg-white px-4 py-2 text-sm text-gray-700 hover:border-[#00C9A7] hover:bg-[#e6faf6] hover:text-[#00b396] transition-all duration-150"
           >
             {opt.label}
           </button>
@@ -152,12 +145,13 @@ function AnswerArea({
                 key={opt.value}
                 type="button"
                 onClick={() => onToggleMulti(opt.value)}
-                className={`rounded-full border px-4 py-2 text-sm transition-colors ${
+                className={`rounded-full border px-4 py-2 text-sm transition-all duration-150 ${
                   selected
-                    ? 'border-emerald-500 bg-emerald-50 text-emerald-700 font-medium'
-                    : 'border-gray-300 bg-white text-gray-700 hover:border-emerald-400 hover:bg-emerald-50'
+                    ? 'border-[#00C9A7] bg-[#e6faf6] text-[#00b396] font-medium'
+                    : 'border-gray-300 bg-white text-gray-700 hover:border-[#00C9A7] hover:bg-[#e6faf6]'
                 }`}
               >
+                {selected && <CheckCircle2 className="inline h-3.5 w-3.5 mr-1 -mt-0.5" />}
                 {opt.label}
               </button>
             );
@@ -167,7 +161,7 @@ function AnswerArea({
           type="button"
           onClick={onConfirmMulti}
           disabled={pendingMultiSelect.length === 0}
-          className="rounded-full bg-emerald-600 px-5 py-2 text-sm font-medium text-white hover:bg-emerald-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+          className="rounded-full bg-[#00C9A7] px-5 py-2 text-sm font-medium text-white hover:bg-[#00b396] disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
         >
           Continue →
         </button>
@@ -181,14 +175,14 @@ function AnswerArea({
         <button
           type="button"
           onClick={() => onBoolean(true)}
-          className="rounded-full border border-gray-300 bg-white px-6 py-2 text-sm text-gray-700 hover:border-emerald-500 hover:bg-emerald-50 hover:text-emerald-700 transition-colors"
+          className="rounded-full border border-gray-300 bg-white px-6 py-2 text-sm text-gray-700 hover:border-[#00C9A7] hover:bg-[#e6faf6] hover:text-[#00b396] transition-all duration-150"
         >
           Yes
         </button>
         <button
           type="button"
           onClick={() => onBoolean(false)}
-          className="rounded-full border border-gray-300 bg-white px-6 py-2 text-sm text-gray-700 hover:border-emerald-500 hover:bg-emerald-50 hover:text-emerald-700 transition-colors"
+          className="rounded-full border border-gray-300 bg-white px-6 py-2 text-sm text-gray-700 hover:border-[#00C9A7] hover:bg-[#e6faf6] hover:text-[#00b396] transition-all duration-150"
         >
           No
         </button>
@@ -213,7 +207,7 @@ function AnswerArea({
           type="button"
           onClick={() => onSetNumber(String(Math.max(min, (isNaN(val) ? min : val) - 1)))}
           disabled={isNaN(val) || val <= min}
-          className="h-9 w-9 rounded-full border border-gray-300 text-lg font-medium text-gray-600 hover:border-emerald-400 disabled:opacity-30 transition-colors"
+          className="h-9 w-9 rounded-full border border-gray-300 text-lg font-medium text-gray-600 hover:border-[#00C9A7] disabled:opacity-30 transition-colors"
         >
           −
         </button>
@@ -223,13 +217,13 @@ function AnswerArea({
           max={max}
           value={pendingNumber}
           onChange={(e) => onSetNumber(e.target.value)}
-          className="w-20 rounded-lg border border-gray-300 px-3 py-2 text-center text-sm focus:border-emerald-500 focus:outline-none"
+          className="w-20 rounded-lg border border-gray-300 px-3 py-2 text-center text-sm focus:border-[#00C9A7] focus:outline-none focus:ring-1 focus:ring-[#00C9A7]/30"
         />
         <button
           type="button"
           onClick={() => onSetNumber(String(Math.min(max, (isNaN(val) ? min : val) + 1)))}
           disabled={isNaN(val) || val >= max}
-          className="h-9 w-9 rounded-full border border-gray-300 text-lg font-medium text-gray-600 hover:border-emerald-400 disabled:opacity-30 transition-colors"
+          className="h-9 w-9 rounded-full border border-gray-300 text-lg font-medium text-gray-600 hover:border-[#00C9A7] disabled:opacity-30 transition-colors"
         >
           +
         </button>
@@ -237,7 +231,7 @@ function AnswerArea({
           type="button"
           onClick={onConfirmNumber}
           disabled={isNaN(val) || val < min || val > max}
-          className="rounded-full bg-emerald-600 px-5 py-2 text-sm font-medium text-white hover:bg-emerald-700 disabled:opacity-40 transition-colors"
+          className="rounded-full bg-[#00C9A7] px-5 py-2 text-sm font-medium text-white hover:bg-[#00b396] disabled:opacity-40 transition-colors"
         >
           Continue →
         </button>
@@ -256,13 +250,13 @@ function AnswerArea({
             onChange={(e) => onSetEmail(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && !isSubmitting && onSubmit()}
             autoComplete="email"
-            className="flex-1 rounded-lg border border-gray-300 px-4 py-2 text-sm focus:border-emerald-500 focus:outline-none"
+            className="flex-1 rounded-lg border border-gray-300 px-4 py-2 text-sm focus:border-[#00C9A7] focus:outline-none focus:ring-1 focus:ring-[#00C9A7]/30"
           />
           <button
             type="button"
             onClick={onSubmit}
             disabled={isSubmitting || email.trim() === ''}
-            className="rounded-lg bg-emerald-600 px-5 py-2 text-sm font-semibold text-white hover:bg-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors inline-flex items-center gap-2"
+            className="rounded-lg bg-[#00C9A7] px-5 py-2 text-sm font-semibold text-white hover:bg-[#00b396] disabled:opacity-50 disabled:cursor-not-allowed transition-colors inline-flex items-center gap-2"
           >
             {isSubmitting ? (
               <>
@@ -274,11 +268,10 @@ function AnswerArea({
             )}
           </button>
         </div>
-        {submitError && (
-          <p className="text-sm text-red-600">{submitError}</p>
-        )}
-        <p className="text-xs text-gray-400">
-          No spam. Unsubscribe any time. This is not financial advice.
+        {submitError && <p className="text-sm text-red-600">{submitError}</p>}
+        <p className="text-xs text-gray-400 flex items-center gap-1">
+          <Lock className="h-3 w-3" />
+          We&apos;ll never share your email. Unsubscribe any time. This is not financial advice.
         </p>
       </div>
     );

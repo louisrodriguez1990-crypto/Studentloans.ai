@@ -73,10 +73,10 @@ export function ResultsEmailCapture({ sessionId, routingTags }: ResultsEmailCapt
   return (
     <div
       ref={barRef}
-      className="fixed bottom-0 left-0 right-0 z-50 border-t border-blue-200 bg-blue-50 px-4 py-3 shadow-lg"
+      className="fixed bottom-0 left-0 right-0 z-50 border-t border-[#00C9A7]/20 bg-[#e6faf6] px-4 py-3 shadow-lg"
     >
       <div className="mx-auto max-w-3xl flex items-center gap-3">
-        <Bell className="h-4 w-4 text-blue-600 shrink-0" />
+        <Bell className="h-4 w-4 text-[#00C9A7] shrink-0" />
 
         {status === 'success' ? (
           <div className="flex flex-1 items-center gap-2">
@@ -97,12 +97,12 @@ export function ResultsEmailCapture({ sessionId, routingTags }: ResultsEmailCapt
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="your@email.com"
-                className="min-w-0 flex-1 rounded-md border border-blue-300 bg-white px-3 py-1.5 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                className="min-w-0 flex-1 rounded-md border border-gray-300 bg-white px-3 py-1.5 text-sm focus:border-[#00C9A7] focus:outline-none focus:ring-1 focus:ring-[#00C9A7]/30"
               />
               <button
                 type="submit"
                 disabled={status === 'loading'}
-                className="shrink-0 rounded-md bg-blue-600 px-4 py-1.5 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-60 flex items-center gap-1.5"
+                className="shrink-0 rounded-md bg-[#00C9A7] px-4 py-1.5 text-sm font-medium text-white hover:bg-[#00b396] disabled:opacity-60 flex items-center gap-1.5"
               >
                 {status === 'loading' ? (
                   <><Loader2 className="h-4 w-4 animate-spin" /> Saving…</>

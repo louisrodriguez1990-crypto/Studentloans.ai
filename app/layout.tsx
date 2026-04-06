@@ -22,16 +22,23 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
   },
+  other: {
+    'ai-content-declaration':
+      'Assessment reports are AI-formatted from deterministic engine output. Policy rules are human-maintained.',
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className="h-full antialiased">
-      <body className="flex min-h-full flex-col bg-white text-gray-900">
+      <body className="flex min-h-full flex-col bg-white text-gray-900 font-sans">
+        <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-[100] focus:rounded-lg focus:bg-white focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-[#1a1f36] focus:shadow-lg">
+          Skip to content
+        </a>
         <AnalyticsProvider>
           <Navbar />
           <SaveAlertBanner />
-          <main className="flex-1">{children}</main>
+          <main id="main-content" className="flex-1">{children}</main>
           <Footer />
         </AnalyticsProvider>
       </body>

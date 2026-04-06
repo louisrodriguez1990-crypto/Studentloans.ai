@@ -30,6 +30,46 @@ export function organizationSchema(url: string, name: string) {
     name,
     description:
       'StudentDebt.ai helps federal student loan borrowers understand how 2026 policy changes affect their repayment options.',
+    logo: `${url}/logo.svg`,
+  };
+}
+
+export function howToSchema({
+  name,
+  description,
+  totalTime,
+  steps,
+}: {
+  name: string;
+  description: string;
+  totalTime: string;
+  steps: { name: string; text: string }[];
+}) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'HowTo',
+    name,
+    description,
+    totalTime,
+    step: steps.map((s, i) => ({
+      '@type': 'HowToStep',
+      position: i + 1,
+      name: s.name,
+      text: s.text,
+    })),
+  };
+}
+
+export function financialServiceSchema(url: string, name: string) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FinancialService',
+    url,
+    name,
+    description:
+      'Free student loan assessment tool that applies 2026 federal policy rules to generate personalized repayment recommendations.',
+    areaServed: { '@type': 'Country', name: 'US' },
+    serviceType: 'Student Loan Assessment',
   };
 }
 
