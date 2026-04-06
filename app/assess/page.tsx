@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { ChatIntake } from '@/components/intake/chat-intake';
+import { IntakeForm } from '@/components/intake/intake-form';
 import { Breadcrumbs } from '@/components/ui/breadcrumbs';
 import { buildMetadata } from '@/components/seo/open-graph';
 import { Lock, Clock, ClipboardList } from 'lucide-react';
@@ -49,7 +49,7 @@ export default function AssessPage() {
       </div>
 
       <div className="mx-auto max-w-2xl px-4 py-10">
-        <ChatIntake />
+        <IntakeForm />
       </div>
     </>
   );

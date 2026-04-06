@@ -56,7 +56,7 @@ export function StepIntent({ form }: StepIntentProps) {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-xl font-semibold text-gray-900">What are you trying to figure out?</h2>
+        <h2 className="text-xl font-semibold text-[#1a1f36]">What are you trying to figure out?</h2>
         <p className="mt-1 text-sm text-gray-500">Select all that apply.</p>
       </div>
 
@@ -66,18 +66,18 @@ export function StepIntent({ form }: StepIntentProps) {
             key={opt.value}
             className={`flex cursor-pointer items-start gap-3 rounded-lg border p-4 transition-colors ${
               selected.includes(opt.value)
-                ? 'border-blue-500 bg-blue-50'
+                ? 'border-[#00C9A7] bg-[#e6faf6]'
                 : 'border-gray-200 hover:border-gray-300'
             }`}
           >
             <input
               type="checkbox"
-              className="mt-0.5 h-4 w-4 rounded border-gray-300 text-blue-600"
+              className="mt-0.5 h-4 w-4 rounded border-gray-300 accent-[#00C9A7]"
               checked={selected.includes(opt.value)}
               onChange={() => toggleIntent(opt.value)}
             />
             <div>
-              <p className="text-sm font-medium text-gray-900">{opt.label}</p>
+              <p className="text-sm font-medium text-[#1a1f36]">{opt.label}</p>
               <p className="text-xs text-gray-500">{opt.description}</p>
             </div>
           </label>
