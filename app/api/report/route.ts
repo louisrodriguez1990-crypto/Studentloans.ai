@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { ReportRequestSchema } from '@/lib/validations';
 import { getSession, getReport, setReport } from '@/lib/kv';
-import { anthropic, REPORT_MODEL, REPORT_MAX_TOKENS } from '@/lib/anthropic';
+import { generateChatCompletion, REPORT_MODEL, REPORT_MAX_TOKENS } from '@/lib/openrouter';
 import { buildUserPrompt, SYSTEM_PROMPT } from '@/lib/report-prompt';
 import { hashAssessment } from '@/engine/hash';
 import { trackEvent } from '@/lib/posthog';
@@ -17,15 +17,11 @@ async function generateWithRetry(assessment: NonNullable<Awaited<ReturnType<type
   let lastErr: unknown;
   for (let attempt = 1; attempt <= maxAttempts; attempt++) {
     try {
-      const message = await anthropic.messages.create({
-        model: REPORT_MODEL,
-        max_tokens: REPORT_MAX_TOKENS,
-        system: SYSTEM_PROMPT,
-        messages: [{ role: 'user', content: buildUserPrompt(assessment) }],
-      });
-      const content = message.content[0];
-      if (content.type !== 'text') throw new Error('Unexpected LLM response type');
-      return content.text;
+      return await generateChatCompletion(
+        SYSTEM_PROMPT,
+        buildUserPrompt(assessment),
+        REPORT_MAX_TOKENS,
+      );
     } catch (err) {
       lastErr = err;
       if (attempt < maxAttempts) {
@@ -61,8 +57,8 @@ export async function POST(request: NextRequest) {
 
   const { sessionId, bust, assessment: clientAssessment } = parsed.data;
 
-  // Load the assessment — prefer KV, fall back to client-provided
-  let assessment = await getSession(sessionId).catch(() => null);
+  // Try KV first, fall back to client-provided assessment (non-fatal if KV is down)
+  let assessment: AssessmentResult | null = await getSession(sessionId).catch(() => null);
   if (!assessment) {
     if (clientAssessment) {
       assessment = clientAssessment as unknown as AssessmentResult;
@@ -76,7 +72,7 @@ export async function POST(request: NextRequest) {
 
   const assessmentHash = hashAssessment(assessment);
 
-  // Check cache unless bust=true
+  // Check report cache (non-fatal if KV is down)
   if (!bust) {
     const cached = await getReport(assessmentHash).catch(() => null);
     if (cached) {
@@ -105,9 +101,10 @@ export async function POST(request: NextRequest) {
     modelVersion: REPORT_MODEL,
   };
 
-  setReport(assessmentHash, report).catch((err) =>
-    console.error('[report] KV cache write failed:', err),
-  );
+  // Cache the report (30-day TTL) — non-fatal if KV is down
+  setReport(assessmentHash, report).catch((err) => {
+    console.error('[report] KV report cache write failed (non-fatal):', err);
+  });
 
   trackEvent(sessionId, 'report_generated', { bust: bust ?? false }).catch(() => {});
 

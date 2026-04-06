@@ -54,7 +54,7 @@ export const LENDERS: Lender[] = [
     ],
     affiliateHref: 'https://www.earnest.com/student-loan-refinancing',
     ctaLabel: 'Check your rate at Earnest',
-    isAffiliate: false, // TODO: apply to Earnest affiliate program via Impact.com
+    isAffiliate: false,
     badge: 'Best for flexibility',
   },
   {
@@ -73,7 +73,7 @@ export const LENDERS: Lender[] = [
     ],
     affiliateHref: 'https://www.sofi.com/student-loan-refinancing/',
     ctaLabel: 'Check your rate at SoFi',
-    isAffiliate: false, // TODO: apply via CJ Affiliate
+    isAffiliate: false,
     badge: 'Best perks',
   },
   {
@@ -92,7 +92,7 @@ export const LENDERS: Lender[] = [
     ],
     affiliateHref: 'https://www.laurelroad.com/student-loan-refinancing/',
     ctaLabel: 'Check your rate at Laurel Road',
-    isAffiliate: false, // TODO: apply via Impact.com
+    isAffiliate: false,
     badge: 'Best for healthcare workers',
   },
   {
@@ -111,7 +111,7 @@ export const LENDERS: Lender[] = [
     ],
     affiliateHref: 'https://www.splashfinancial.com/student-loan-refinancing/',
     ctaLabel: 'Check your rate at Splash',
-    isAffiliate: false, // TODO: apply direct
+    isAffiliate: false,
     badge: 'Best for lower credit scores',
   },
 ];

@@ -9,6 +9,7 @@ import { checkIDREligibility } from './rules/idr';
 import { checkPSLFEligibility } from './rules/pslf';
 import { checkRefinanceCandidate } from './rules/refinance';
 import { checkConsolidation } from './rules/consolidation';
+import { POLICY_CONFIG } from '@/lib/policy-config';
 import type {
   IntakeData,
   AssessmentResult,
@@ -88,7 +89,7 @@ function collectWarnings(intake: IntakeData, eligibility: EligibilityFlags): War
         'have been placed in administrative forbearance. Payments made during forbearance ' +
         'do not count toward IDR forgiveness or PSLF. Check studentaid.gov for current status.',
       source: 'https://studentaid.gov/announcements-events/save-plan',
-      effectiveDate: '2024-07-18',
+      effectiveDate: POLICY_CONFIG.save.injunctionEffectiveDate,
     });
   }
 

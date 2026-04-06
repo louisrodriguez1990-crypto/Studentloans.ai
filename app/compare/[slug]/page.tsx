@@ -9,12 +9,11 @@ import { JsonLd, articleSchema, breadcrumbSchema } from '@/components/seo/json-l
 import { BASE_URL } from '@/lib/constants';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
-import { StickyAssessmentCTA } from '@/components/ui/sticky-assessment-cta';
 
-export const revalidate = 3600; // ISR: revalidate hourly
+export const revalidate = 3600;
 export const dynamicParams = false;
 
-const CONTENT_DIR = path.join(process.cwd(), 'content', 'learn');
+const CONTENT_DIR = path.join(process.cwd(), 'content', 'compare');
 
 interface Frontmatter {
   title: string;
@@ -23,7 +22,7 @@ interface Frontmatter {
   dateModified: string;
 }
 
-async function getLearnPage(slug: string) {
+async function getComparePage(slug: string) {
   const filePath = path.join(CONTENT_DIR, `${slug}.mdx`);
   let raw: string;
   try {
@@ -52,23 +51,23 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const page = await getLearnPage(slug);
+  const page = await getComparePage(slug);
   if (!page) return {};
   return buildMetadata({
     title: page.frontmatter.title,
     description: page.frontmatter.description,
-    path: `/learn/${slug}`,
+    path: `/compare/${slug}`,
     type: 'article',
   });
 }
 
-export default async function LearnPage({
+export default async function ComparePage({
   params,
 }: {
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const page = await getLearnPage(slug);
+  const page = await getComparePage(slug);
   if (!page) notFound();
 
   const { frontmatter, content } = page;
@@ -77,7 +76,7 @@ export default async function LearnPage({
     <>
       <JsonLd
         data={articleSchema({
-          url: `${BASE_URL}/learn/${slug}`,
+          url: `${BASE_URL}/compare/${slug}`,
           title: frontmatter.title,
           description: frontmatter.description,
           datePublished: frontmatter.datePublished,
@@ -87,8 +86,8 @@ export default async function LearnPage({
       <JsonLd
         data={breadcrumbSchema([
           { name: 'Home', url: BASE_URL },
-          { name: 'Learn', url: `${BASE_URL}/learn` },
-          { name: frontmatter.title, url: `${BASE_URL}/learn/${slug}` },
+          { name: 'Compare', url: `${BASE_URL}/compare` },
+          { name: frontmatter.title, url: `${BASE_URL}/compare/${slug}` },
         ])}
       />
 
@@ -132,7 +131,6 @@ export default async function LearnPage({
           </Link>
         </div>
       </div>
-      <StickyAssessmentCTA />
     </>
   );
 }

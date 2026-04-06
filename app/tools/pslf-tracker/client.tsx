@@ -2,10 +2,11 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { AlertTriangle, Award, ArrowRight, Info, RotateCcw } from 'lucide-react';
+import { AlertTriangle, Award, ArrowRight, Info, RotateCcw, Cloud, CloudOff } from 'lucide-react';
 
 const TOTAL_PAYMENTS = 120;
 const STORAGE_KEY = 'pslf_tracker_v1';
+const EMAIL_STORAGE_KEY = 'pslf_tracker_email';
 
 interface TrackerState {
   qualifyingPayments: number;
@@ -51,14 +52,28 @@ export function PSLFTrackerClient() {
   const [email, setEmail] = useState('');
   const [emailSubmitted, setEmailSubmitted] = useState(false);
   const [emailError, setEmailError] = useState('');
+  const [cloudSynced, setCloudSynced] = useState(false);
 
-  // Load from localStorage on mount
+  // Load from localStorage on mount; if email was saved before, fetch cloud state
   useEffect(() => {
     try {
+      const savedEmail = localStorage.getItem(EMAIL_STORAGE_KEY);
       const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) {
-        const parsed = JSON.parse(raw) as TrackerState;
-        setState(parsed);
+      if (raw) setState(JSON.parse(raw) as TrackerState);
+
+      if (savedEmail) {
+        setEmail(savedEmail);
+        setEmailSubmitted(true);
+        // Fetch cloud state and merge (cloud wins if it exists)
+        fetch(`/api/pslf-tracker/load?email=${encodeURIComponent(savedEmail)}`)
+          .then((r) => r.json())
+          .then((data: { state: TrackerState | null }) => {
+            if (data.state) {
+              setState(data.state);
+              setCloudSynced(true);
+            }
+          })
+          .catch(() => {}); // non-fatal
       }
     } catch {
       // ignore
@@ -75,6 +90,21 @@ export function PSLFTrackerClient() {
       // ignore
     }
   }, [state, loaded]);
+
+  // Sync to cloud whenever state changes and we have an email
+  useEffect(() => {
+    if (!loaded || !emailSubmitted || !email) return;
+    const timeout = setTimeout(() => {
+      fetch('/api/pslf-tracker/save', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, state }),
+      })
+        .then((r) => { if (r.ok) setCloudSynced(true); })
+        .catch(() => {}); // non-fatal
+    }, 1000); // debounce 1s
+    return () => clearTimeout(timeout);
+  }, [state, loaded, emailSubmitted, email]);
 
   const paymentsRemaining = Math.max(0, TOTAL_PAYMENTS - state.qualifyingPayments);
   const progressPct = Math.min(100, (state.qualifyingPayments / TOTAL_PAYMENTS) * 100);
@@ -96,16 +126,27 @@ export function PSLFTrackerClient() {
       return;
     }
     try {
+      // Subscribe for policy updates
       const res = await fetch('/api/subscribe', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, segment: 'forgiveness_candidate' }),
       });
-      if (res.ok) {
-        setEmailSubmitted(true);
-      } else {
+      if (!res.ok) {
         setEmailError('Something went wrong. Please try again.');
+        return;
       }
+
+      // Save tracker state to cloud
+      await fetch('/api/pslf-tracker/save', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, state }),
+      });
+
+      localStorage.setItem(EMAIL_STORAGE_KEY, email);
+      setEmailSubmitted(true);
+      setCloudSynced(true);
     } catch {
       setEmailError('Something went wrong. Please try again.');
     }
@@ -115,6 +156,10 @@ export function PSLFTrackerClient() {
     if (confirm('Reset your tracker? This will clear all saved progress.')) {
       setState(DEFAULT_STATE);
       localStorage.removeItem(STORAGE_KEY);
+      localStorage.removeItem(EMAIL_STORAGE_KEY);
+      setEmailSubmitted(false);
+      setCloudSynced(false);
+      setEmail('');
     }
   }
 
@@ -137,7 +182,17 @@ export function PSLFTrackerClient() {
       <div className="rounded-xl border border-gray-200 bg-white p-6">
         <div className="flex items-center justify-between mb-2">
           <p className="text-sm font-medium text-gray-700">Qualifying payments</p>
-          <p className="text-sm text-gray-500">{state.qualifyingPayments} / {TOTAL_PAYMENTS}</p>
+          <div className="flex items-center gap-2">
+            {emailSubmitted && (
+              <span className="inline-flex items-center gap-1 text-xs text-gray-400">
+                {cloudSynced
+                  ? <><Cloud className="h-3 w-3 text-emerald-500" /> Saved to cloud</>
+                  : <><CloudOff className="h-3 w-3" /> Local only</>
+                }
+              </span>
+            )}
+            <p className="text-sm text-gray-500">{state.qualifyingPayments} / {TOTAL_PAYMENTS}</p>
+          </div>
         </div>
         <div className="h-4 bg-gray-200 rounded-full overflow-hidden">
           <div
@@ -304,13 +359,13 @@ export function PSLFTrackerClient() {
         </div>
       </div>
 
-      {/* Email capture for monthly updates */}
+      {/* Email capture — also enables cloud sync */}
       {!emailSubmitted && (
         <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-6">
-          <p className="font-semibold text-gray-900">Get monthly PSLF policy updates</p>
+          <p className="font-semibold text-gray-900">Save your progress + get policy updates</p>
           <p className="mt-1 text-sm text-gray-600">
-            PSLF rules and court decisions change. We&apos;ll notify you when anything relevant to your
-            tracker changes — including when the SAVE injunction resolves.
+            Enter your email to back up your tracker to the cloud and receive notifications when
+            PSLF rules change — including when the SAVE injunction resolves.
           </p>
           {showEmailCapture ? (
             <form onSubmit={handleEmailSubmit} className="mt-4 flex gap-2">
@@ -325,7 +380,7 @@ export function PSLFTrackerClient() {
                 type="submit"
                 className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-700"
               >
-                Subscribe
+                Save &amp; subscribe
               </button>
             </form>
           ) : (
@@ -333,7 +388,7 @@ export function PSLFTrackerClient() {
               onClick={() => setShowEmailCapture(true)}
               className="mt-4 inline-flex items-center gap-2 rounded-lg bg-emerald-600 px-5 py-2.5 font-medium text-white hover:bg-emerald-700 text-sm"
             >
-              Get PSLF updates <ArrowRight className="h-4 w-4" />
+              Save progress &amp; get updates <ArrowRight className="h-4 w-4" />
             </button>
           )}
           {emailError && <p className="mt-2 text-sm text-red-600">{emailError}</p>}
@@ -341,9 +396,10 @@ export function PSLFTrackerClient() {
       )}
 
       {emailSubmitted && (
-        <div className="rounded-lg border border-emerald-200 bg-emerald-50 p-4">
+        <div className="rounded-lg border border-emerald-200 bg-emerald-50 p-4 flex items-center gap-2">
+          <Cloud className="h-4 w-4 text-emerald-600 shrink-0" />
           <p className="text-sm font-medium text-emerald-800">
-            You&apos;re subscribed. We&apos;ll notify you of PSLF policy changes.
+            Progress saved to cloud. Changes sync automatically.
           </p>
         </div>
       )}
