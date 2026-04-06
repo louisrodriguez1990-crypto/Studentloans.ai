@@ -45,13 +45,13 @@ export function Navbar() {
   }, []);
 
   return (
-    <header className="border-b border-gray-200 bg-white relative z-40">
+    <header className="border-b border-teal-600 bg-teal-700 relative z-40">
       <nav
         className="mx-auto flex max-w-5xl items-center justify-between px-4 py-4"
         aria-label="Main navigation"
       >
         {/* Logo */}
-        <Link href="/" className="text-lg font-extrabold text-gray-900 hover:text-teal-600 transition-colors">
+        <Link href="/" className="text-lg font-extrabold text-white hover:text-teal-200 transition-colors">
           {SITE_NAME}
         </Link>
 
@@ -61,7 +61,7 @@ export function Navbar() {
           <div className="relative" ref={dropdownRef}>
             <button
               onClick={() => setToolsOpen((v) => !v)}
-              className="flex items-center gap-1 text-gray-600 hover:text-gray-900"
+              className="flex items-center gap-1 text-teal-100 hover:text-white transition-colors"
               aria-expanded={toolsOpen}
               aria-haspopup="true"
             >
@@ -86,14 +86,14 @@ export function Navbar() {
           </div>
 
           {NAV_LINKS.map(({ href, label }) => (
-            <Link key={href} href={href} className="text-gray-600 hover:text-gray-900">
+            <Link key={href} href={href} className="text-teal-100 hover:text-white transition-colors">
               {label}
             </Link>
           ))}
 
           <Link
             href="/assess"
-            className="rounded-full bg-teal-600 px-5 py-2 text-sm font-medium text-white hover:bg-teal-700 transition-colors"
+            className="rounded-full bg-white px-5 py-2 text-sm font-medium text-teal-700 hover:bg-teal-50 transition-colors"
           >
             <span className="sm:hidden">Start</span>
             <span className="hidden sm:inline">Get My Assessment</span>
@@ -104,7 +104,7 @@ export function Navbar() {
         <div className="flex sm:hidden items-center gap-3">
           <Link
             href="/assess"
-            className="rounded-full bg-teal-600 px-4 py-1.5 text-xs font-medium text-white hover:bg-teal-700 transition-colors"
+            className="rounded-full bg-white px-4 py-1.5 text-xs font-medium text-teal-700 hover:bg-teal-50 transition-colors"
           >
             Free Assessment
           </Link>
@@ -112,7 +112,7 @@ export function Navbar() {
             onClick={() => setMobileOpen((v) => !v)}
             aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
             aria-expanded={mobileOpen}
-            className="p-1 text-gray-600 hover:text-gray-900"
+            className="p-1 text-teal-100 hover:text-white"
           >
             {mobileOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
           </button>
@@ -121,31 +121,31 @@ export function Navbar() {
 
       {/* Mobile menu panel */}
       {mobileOpen && (
-        <div className="sm:hidden border-t border-gray-100 bg-white px-4 pb-4">
+        <div className="sm:hidden border-t border-teal-700 bg-teal-800 px-4 pb-4">
           {/* Tools section */}
           <div className="pt-3">
-            <p className="text-xs font-semibold uppercase tracking-wide text-gray-400 mb-2">Tools</p>
+            <p className="text-xs font-semibold uppercase tracking-wide text-teal-400 mb-2">Tools</p>
             {TOOLS_LINKS.map(({ href, label, icon: Icon }) => (
               <Link
                 key={href}
                 href={href}
                 onClick={() => setMobileOpen(false)}
-                className="flex items-center gap-3 py-2.5 text-sm text-gray-700 hover:text-teal-600"
+                className="flex items-center gap-3 py-2.5 text-sm text-teal-100 hover:text-white"
               >
-                <Icon className="h-4 w-4 text-gray-400 shrink-0" />
+                <Icon className="h-4 w-4 text-teal-400 shrink-0" />
                 {label}
               </Link>
             ))}
           </div>
 
           {/* Nav links */}
-          <div className="mt-3 border-t border-gray-100 pt-3 space-y-0.5">
+          <div className="mt-3 border-t border-teal-700 pt-3 space-y-0.5">
             {NAV_LINKS.map(({ href, label }) => (
               <Link
                 key={href}
                 href={href}
                 onClick={() => setMobileOpen(false)}
-                className="block py-2.5 text-sm text-gray-700 hover:text-teal-600"
+                className="block py-2.5 text-sm text-teal-100 hover:text-white"
               >
                 {label}
               </Link>

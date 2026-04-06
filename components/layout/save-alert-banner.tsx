@@ -60,12 +60,12 @@ export function SaveAlertBanner() {
                   placeholder="your@email.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="min-w-0 flex-1 sm:w-48 rounded-md border border-amber-300 bg-white px-3 py-1.5 text-sm focus:border-amber-500 focus:outline-none"
+                  className="min-w-0 flex-1 sm:w-48 rounded-full border border-amber-300 bg-white px-3 py-1.5 text-sm focus:border-amber-500 focus:outline-none"
                 />
                 <button
                   type="submit"
                   disabled={loading}
-                  className="rounded-md bg-amber-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-amber-700 disabled:opacity-60 shrink-0"
+                  className="rounded-full bg-amber-600 px-4 py-1.5 text-sm font-medium text-white hover:bg-amber-700 disabled:opacity-60 shrink-0"
                 >
                   {loading ? 'Saving…' : 'Notify me'}
                 </button>
