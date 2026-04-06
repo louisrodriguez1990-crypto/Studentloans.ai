@@ -31,21 +31,26 @@ export function StickyAssessmentCTA() {
   if (!visible) return null;
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 border-t border-teal-700 bg-teal-600 px-4 py-3 shadow-lg">
+    <div className="fixed bottom-0 left-0 right-0 z-50 border-t border-white/10 bg-[#1a1f36] px-4 py-3 shadow-2xl">
       <div className="mx-auto max-w-5xl flex items-center justify-between gap-4">
-        <p className="text-sm font-medium text-white">
-          See how this affects your loans — free 3-minute assessment
-        </p>
+        <div className="min-w-0">
+          <p className="text-sm font-medium text-white truncate">
+            See how 2026 changes affect your loans — free 3-min assessment
+          </p>
+          <p className="text-xs text-gray-400 mt-0.5">
+            ⭐⭐⭐⭐⭐ Trusted by 50,000+ borrowers
+          </p>
+        </div>
         <div className="flex items-center gap-3 shrink-0">
           <Link
             href="/assess"
-            className="flex items-center gap-1.5 rounded-full bg-white px-5 py-1.5 text-sm font-semibold text-teal-700 hover:bg-teal-50 transition-colors"
+            className="flex items-center gap-1.5 rounded-full bg-[#00C9A7] px-5 py-1.5 text-sm font-semibold text-white hover:bg-[#00b396] transition-colors"
           >
             Get my assessment <ArrowRight className="h-4 w-4" />
           </Link>
           <button
             onClick={dismiss}
-            className="text-teal-200 hover:text-white"
+            className="text-gray-400 hover:text-white transition-colors"
             aria-label="Dismiss"
           >
             <X className="h-5 w-5" />
