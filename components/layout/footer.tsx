@@ -7,9 +7,12 @@ export function Footer() {
       <div className="mx-auto max-w-5xl px-4 py-10">
         <div className="grid grid-cols-2 gap-8 md:grid-cols-5">
           <div className="col-span-2 md:col-span-1">
-            <p className="font-semibold text-gray-900">{SITE_NAME}</p>
+            <p className="font-extrabold text-gray-900">{SITE_NAME}</p>
             <p className="mt-2 text-xs text-gray-500">
               Policy information as of {POLICY_AS_OF_DATE}.
+            </p>
+            <p className="mt-1 text-xs text-gray-400">
+              © {new Date().getFullYear()} {SITE_NAME}
             </p>
           </div>
 
