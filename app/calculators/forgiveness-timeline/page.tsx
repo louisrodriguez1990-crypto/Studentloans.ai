@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
 import { buildMetadata } from '@/components/seo/open-graph';
-import { JsonLd, breadcrumbSchema } from '@/components/seo/json-ld';
-import { BASE_URL } from '@/lib/constants';
+import { Breadcrumbs } from '@/components/ui/breadcrumbs';
+import { LastReviewed } from '@/components/ui/last-reviewed';
+import { InlineEmailCapture } from '@/components/ui/inline-email-capture';
 import { ForgivenessTimelineClient } from './client';
 
 export const metadata: Metadata = buildMetadata({
@@ -14,22 +15,29 @@ export const metadata: Metadata = buildMetadata({
 
 export default function ForgivenessTimelinePage() {
   return (
-    <>
-      <JsonLd
-        data={breadcrumbSchema([
-          { name: 'Home', url: BASE_URL },
-          { name: 'Calculators', url: `${BASE_URL}/calculators` },
-          { name: 'Forgiveness Timeline', url: `${BASE_URL}/calculators/forgiveness-timeline` },
-        ])}
+    <div className="mx-auto max-w-3xl px-4 py-8 sm:py-12">
+      <Breadcrumbs
+        items={[
+          { label: 'Calculators', href: '/calculators/forgiveness-timeline' },
+          { label: 'Forgiveness Timeline', href: '/calculators/forgiveness-timeline' },
+        ]}
+        className="mb-6"
       />
-      <div className="mx-auto max-w-2xl px-4 py-12">
-        <h1 className="text-3xl font-bold text-gray-900">Forgiveness Timeline Calculator</h1>
-        <p className="mt-3 text-gray-600">
-          Enter your loan details to see exactly when your loans would be forgiven under IBR or
-          PSLF — and how much would be wiped out.
-        </p>
-        <ForgivenessTimelineClient />
-      </div>
-    </>
+
+      <LastReviewed className="mb-4" />
+
+      <h1 className="text-3xl font-bold text-[#1a1f36]">Forgiveness Timeline Calculator</h1>
+      <p className="mt-3 text-[#4a5568]">
+        Enter your loan details to see exactly when your loans would be forgiven under IBR or
+        PSLF — and how much would be wiped out.
+      </p>
+
+      <ForgivenessTimelineClient />
+
+      <InlineEmailCapture
+        segment="forgiveness_calculator"
+        prompt="Get notified when forgiveness policy changes:"
+      />
+    </div>
   );
 }

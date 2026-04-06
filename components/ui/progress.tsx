@@ -19,7 +19,7 @@ export function Progress({ current, total, className }: ProgressProps) {
       </div>
       <div className="h-1.5 w-full rounded-full bg-gray-200">
         <div
-          className="h-1.5 rounded-full bg-blue-600 transition-all duration-300"
+          className="h-1.5 rounded-full bg-[#00C9A7] transition-all duration-300"
           style={{ width: `${pct}%` }}
           role="progressbar"
           aria-valuenow={pct}
