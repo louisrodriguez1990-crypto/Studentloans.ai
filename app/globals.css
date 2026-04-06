@@ -2,8 +2,11 @@
 @plugin "@tailwindcss/typography";
 
 :root {
-  --background: #ffffff;
+  --background: #F8F9FC;
   --foreground: #171717;
+  --navy: #1a1f36;
+  --teal-accent: #00C9A7;
+  --bg-offwhite: #F8F9FC;
 }
 
 @theme inline {
@@ -19,6 +22,12 @@ html {
 body {
   background: var(--background);
   color: var(--foreground);
+}
+
+/* Hero dot-grid background pattern */
+.dot-grid {
+  background-image: radial-gradient(circle, #d1d5db 1px, transparent 1px);
+  background-size: 24px 24px;
 }
 
 /* Subtle scrollbar polish */
